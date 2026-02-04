@@ -9,7 +9,7 @@ span{
 span a{
   color: white;
 }
-span active{
+span .active{
   margin: auto;
   text-align: center;
 }
