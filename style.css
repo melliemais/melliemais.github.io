@@ -9,3 +9,7 @@ span{
 span a{
   color: white;
 }
+span active{
+  margin: auto;
+  text-align: center;
+}
