@@ -1,16 +1,16 @@
 /* Global variables. */
 
-span{
+.customSpan{
   background-color: black;
+  margin: auto;
+  display: block;
+  text-align: center;
 }
 .active{
   background-color: rgb(90,60,0);
 }
-span{
-  margin: 0px auto;
-  text-align: center;
-}
 
-span a{
+
+.customSpan a{
   color: white;
 }
