@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>pinkRover's website</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      div{
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      position: relative;
+      animation-name: myAnimation;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      }
+      @keyframes myAnimation{
+        0% {
+          background-color: red; left:0px; top:0px;
+        }
+        25% {
+          background-color: blue; left:100px; top:0px;
+        }
+        50% {
+          background-color: green; left:100px; top:100px;
+        }
+        75% {
+          background-color: yellow; left:0px; top:100px;
+        }
+        100%{
+          background-color: red; left:0px; top:0px;
+        }
+      }
+      
+    </style>
+    <nav>
+      <span class="active"><a href="index.html">Home</a></span>
+      <span class="active"><a href="aboutMe.html">About</a></span>
+      <span class="active"><a href="blog.html">Blog</a></span>
+      <span><a href="fun.html">Fun</a></span>
+    </nav>
+  <main>
+    <h1>pinkRover</h1>
+      <h2>Fun</h2>
+      <embed type=image/gif src="e.gif">
+      <p> I subject you to the 3x speed electrodynamix miniship part.<p>
+      <strong><em>Have fun!</em></strong>
+      <div></div>
+  </main>
+  <footer>
+    <p>This is a footer.</p>
+  </footer>
+</html>
