@@ -2,15 +2,16 @@
 
 .customSpan{
   background-color: black;
-  margin: auto;
-  display: block;
-  text-align: center;
+  margin: 0px auto;
+  padding: 0px 20px;
+  color: white;
+}
+.customSpan:visited {
+  color:white;
+}
+.customSpan:hover {
+  background-color: rgb(180,120,0);
 }
 .active{
   background-color: rgb(90,60,0);
-}
-
-
-.customSpan a{
-  color: white;
 }
