@@ -1,0 +1,11 @@
+/* Global variables. */
+
+span{
+  background-color: black;
+}
+.active{
+  background-color: rgb(90,60,0);
+}
+span a{
+  color: white;
+}
