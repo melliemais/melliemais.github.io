@@ -15,3 +15,26 @@
 .active{
   background-color: rgb(90,60,0);
 }
+
+table{
+  margin: 0px auto;
+  color: black;
+}
+caption{
+  color: white;
+}
+td, th{
+  text-align: center;
+  padding: 0px 10px;
+  border: 2px solid gray;
+}
+table tr:nth-child(even){
+  background-color: lightgray;
+}
+tr{
+  background-color: white;
+}
+th,thead{
+  background-color: rgb(127,127,127);
+  font-weight: bold;
+}
