@@ -19,6 +19,7 @@
 table{
   margin: 0px auto;
   color: black;
+  margin-bottom: 20px;
 }
 caption{
   color: white;
@@ -29,12 +30,12 @@ td, th{
   border: 2px solid gray;
 }
 table tr:nth-child(even){
-  background-color: lightgray;
+  background-color: rgb(180,180,180);
 }
 tr{
-  background-color: white;
+  background-color: rgb(210,210,210);
 }
 th,thead{
-  background-color: rgb(127,127,127);
+  color: lightgray;
   font-weight: bold;
 }
