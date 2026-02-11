@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+         <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Simple Layout</title>
+         <style>
+            /* Your CSS goes here */
+            body{
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+                padding: 1em;
+            }
+            main{
+                display: flex;
+                flex-direction: column;
+                padding: 1em;
+            }
+            article{
+                background-color: lightgray;
+                height: 20vh;
+                flex-direction: column;
+                flex-grow: 1;
+                padding: 1em;
+            }
+            nav, aside{
+                background-color: beige;
+                padding: 1em;
+            }
+            header, footer{
+                background-color: yellowgreen;
+                height: 10vh;
+                padding: 1em;
+            }
+            @media (min-width: 576px){
+                main{
+                    flex-direction: row;
+                }
+                nav, aside{
+                    flex: 0 0 20vw;
+                }
+            }
+         </style>
+    </head>
+    <body>
+          <header>Header</header>
+         <main>
+             <nav>Nav</nav>
+             <article>Article</article>
+              <aside>Aside</aside>
+          </main>
+        <footer>Footer</footer>
+    </body>
+</html>
