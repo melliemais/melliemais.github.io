@@ -6,20 +6,110 @@
 <title>Flexbox Fun</title>
 <style>
 /* Additional styles for fun */
-.red { background: tomato; }
-.blue { background: dodgerblue; }
-.green { background: mediumseagreen; }
-.orange { background: orange; }
-.purple { background: rebeccapurple; }
+
+    
+
+    @media (min-width: 900px){
+        body{
+            color: purple;
+        }
+    }
+
+    .site-nav{
+        background-color: #333;
+        display: flex;
+        flex-flow: wrap row;
+        justify-content: space-between;
+        font-size: 24px;
+        align-items: center;
+    }
+
+    .nav-links{
+        flex-flow: wrap row;
+        align-items: center;
+        justify-content: end;
+    }
+
+    .logo{
+        float: left;
+        text-align: right;
+        justify-content: center;
+        color: white;
+        font-size: 1.5em;
+        margin: 20px;
+
+    }
+
+    .nav-item{
+        color: white;
+        justify-content: right;
+        display: flex row;
+        text-align: center;
+        text-decoration-line: none;
+        margin-right: 20px;
+        padding: 5px;
+    }
+
+    .nav-item:hover{
+        background-color: gray;
+    }
+
+    .flex-container{
+        background-color: lightgray;
+        display: flex;
+        flex-flow: wrap row;
+        align-items: center;
+        justify-content: center;
+    }
+    .flex-item{
+        width: 100px;
+        height: 100px;
+        color: white;
+        font-size: 2em;
+        text-align: center;
+        align-content: center;
+        margin: 10px;
+    }
+
+    @media (max-width: 600px){
+        .site-nav{
+            flex-flow: nowrap column;
+        }
+        .nav-links{
+            display: flex;
+            flex-flow: wrap column;
+        }
+        .nav-item{
+            padding-top: 10px;
+        }
+    }
+
+    .red { background: tomato; }
+    .blue { background: dodgerblue; }
+    .green { background: mediumseagreen; }
+    .orange { background: orange; }
+    .purple { background: rebeccapurple; }
+
 </style>
 </head>
 <body>
-<header>
-<h1>FlexBox practice</h1>
-</header>
+    <header>
+        <nav class="site-nav">
+            <div class="logo">My Site</div>
+            <ul class="nav-links">
+                <a class="nav-item" href="myflex.html">Flex</a>
+                <a class="nav-item" href="layout.html">Layout</a>
+                <a class="nav-item" href="about.html">About</a>
+            </ul>
+        </nav>
+    </header>
 <main>
 <section class="flex-container">
-<div class="flex-item red" width="100px" height="100px" text-color=white font-size=2cm>1</div>
+    <div class="flex-item red">1</div>
+    <div class="flex-item blue">2</div>
+    <div class="flex-item green">3</div>
+    <div class="flex-item orange">4</div>
+    <div class="flex-item purple">5</div>
 </section>
 </main>
 <footer>
