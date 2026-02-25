@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Final Showdown</title>
+    <title>Conclusion</title>
     <link rel="stylesheet" href="styleProject2.css">
 </head>
 <body>
     <section class="container">
-        <h1>Your Quest Has Concluded</h1>
-        <p>Based on your choices, [Insert a dynamic conclusion based on the user's journey and final decision]. The kingdom will remember your deeds for generations to come.</p>
-        <p>We hope you enjoyed your adventure. Would you like to provide feedback on your experience?</p>
+        <form action="projects.html">
+            <h1>Your Quest Has Concluded</h1>
+            <p>Based on your choices, [Insert a dynamic conclusion based on the user's journey and final decision]. The kingdom will remember your deeds for generations to come.</p>
+            <p>We hope you enjoyed your adventure. Would you like to provide feedback on your experience?</p>
+            <label for="feedback">Feedback:</label>
+            <textarea name="feedback" id="feedback" rows="10" cols="60"></textarea>
+            <input type="submit" value="Submit Feedback">
+        </form>
+        <input type="submit" value="Play Again" onclick="again()">
     </section>
+    <script>
+        function again(){
+            window.location.href = "welcome.html"
+        }
+    </script>
 </body>
 </html>
