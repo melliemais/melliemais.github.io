@@ -11,15 +11,62 @@
         <h1>The Path of Stealth</h1>
         <p>To successfully navigate the Path of Stealth, you must choose your actions carefully. Select the correct sequence of actions to avoid detection and reach your objective.</p>
         <!-- Actions -->
-        <div onclick="selectAction('hide')" class="stealth-option">Hide in the shadows</div>
-        <div onclick="selectAction('run')" class="stealth-option">Run quickly to the next cover</div>
-        <div onclick="selectAction('distract')" class="stealth-option">Create a distraction</div>
-        <div onclick="selectAction('wait')" class="stealth-option">Wait for the right moment</div>
+        <div onclick="selectAction('hide')" class="stealth-option" id="hide">Hide in the shadows</div>
+        <div onclick="selectAction('run')" class="stealth-option" id="run">Run quickly to the next cover</div>
+        <div onclick="selectAction('distract')" class="stealth-option" id="distract">Create a distraction</div>
+        <div onclick="selectAction('wait')" class="stealth-option" id="wait">Wait for the right moment</div>
         <!-- Buttons -->
         <button onclick="checkSequence()">Check Sequence</button>
         <button onclick="reset()">Reset!</button>
         <script>
             const correctSequence = ['hide', 'wait', 'distract'];
+            let currentSequence = [];
+
+            function selectAction(input){
+                if (!currentSequence.includes(input)){
+                    select(input);
+                    currentSequence.push(input);
+                }
+
+            }
+
+            function checkSequence(){
+                if (correctSequence.length == currentSequence.length){
+                    let i = 0;
+                    for (i = 0; i < 3; i++){
+                        if (currentSequence[i] != correctSequence[i]){
+                            reset();
+                            i = 4;
+                        }
+                    }
+                    if (i == 3){
+                        alert("Congratulations");
+                        window.location.href = "page6.html";
+                    }
+                }else{reset();}
+            }
+
+            function select(input){
+                if (currentSequence.length === 0){
+                    document.getElementById(input).style.backgroundColor = "red";
+                } else if (currentSequence.length === 1){
+                    document.getElementById(input).style.backgroundColor = "yellow";
+                }
+                else if (currentSequence.length === 2){
+                    document.getElementById(input).style.backgroundColor = "green";
+                }
+                else if (currentSequence.length === 3){
+                    document.getElementById(input).style.backgroundColor = "blue";
+                }
+            }
+            
+            function reset(){
+                currentSequence = [];
+                document.getElementById("hide").style.backgroundColor = "#f0f0f0";
+                document.getElementById("run").style.backgroundColor = "#f0f0f0";
+                document.getElementById("distract").style.backgroundColor = "#f0f0f0";
+                document.getElementById("wait").style.backgroundColor = "#f0f0f0";
+            }
             // Your Code here
         </script>
     </section>
