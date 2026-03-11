@@ -42,14 +42,14 @@
             console.log(today);
             let dateGiven = new Date(date);
             if (dateGiven > today){
-                console.log("Too soon.")
-            }else{
+                console.error("Too soon.")
+                return false;
+            }
                 console.log("Form submitted successfully!");
                 console.log("Income source name:", name);
                 console.log("Date:", date);
                 console.log("Amount: ",amount);
                 console.log("Payment Method:", payment);
-            }
             // Log to console (or do whatever you need with the data)
             
             });
