@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <span id="span"></span>
+    <script>
+        let counter = 0;
+        let milliCounter = 0;
+        let interval = 30;
+        let milliID = setInterval(stopwatch,interval);
+        const span = document.querySelector("span");
+        function stopwatch(){
+
+            milliCounter++;
+
+            let hours = Math.floor(counter/3600) ;
+            span.textContent = hours + ":";
+
+            let minutes = Math.floor((counter/60) % 60);
+            if (minutes < 10){
+                span.textContent += "0";
+            }
+            span.textContent += minutes + ":";
+
+            let seconds = (counter % 60);
+            if (counter % 60 < 10){
+                span.textContent += "0";
+            }
+            span.textContent +=  seconds + ".";
+
+            let subseconds = Math.floor(milliCounter * 100 / interval);
+            if (subseconds > 99){
+                milliCounter -= interval;
+                subseconds -= 100;
+                counter++;
+            }
+            if (subseconds < 10){
+                span.textContent += "0";
+            }
+
+            span.textContent += subseconds;
+        }
+
+    </script>
+    </body>
+</html>
