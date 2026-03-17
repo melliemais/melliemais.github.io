@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <a href="projects.html">Back to Project Portal</a>
     <h1>I ❤️ Dogs</h1>
     <main>
         <section id="app">
@@ -33,6 +34,7 @@
 
     <script defer>
         'use strict';
+        let idNum = 1;
         function createRow(id, url) {
             const tr = document.createElement('tr');
             const td_id = document.createElement('td');
@@ -74,19 +76,21 @@
             console.log(data);
             app.appendChild(document.createTextNode(JSON.stringify(data)));
         }
-        //document.addEventListener("DOMContentLoaded", fetchDogPicsAsync);
+        document.addEventListener("DOMContentLoaded", fetchDogPicsAsync);
+        let timer = setInterval(generateDog,5000);
 
         // -- fetch here --
-        const url = 'https://dog.ceo/api/breeds/image/random';
-        const response = fetch(url)
+        async function generateDog(){
+            const url = 'https://dog.ceo/api/breeds/image/random';
+            const response = fetch(url)
             .then((response) => response.json())
             .then(processDogData);
-
+        }
         function processDogData(data) {
             console.log(data);
             app.appendChild(document.createTextNode(JSON.stringify(data)));
 
-            createRow(5, data.message);
+            createRow(++idNum, data.message);
         }
 
     </script>
