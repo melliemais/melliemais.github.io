@@ -32,21 +32,40 @@
 </body>
 <script>
     let div = document.getElementById("container");
-    let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 79, 83, 89, 91, 97];
-    for (let i = 0; i <= 100; i++){
+    let number = 0;
+    let timer = setInterval(resetInterval, 500,number);
+    let primes = [2];
+    function addNumber(num){
+        number++;
         let numberNode = document.createElement("div");
         numberNode.id = "cell";
-        numberNode.innerText = i;
-        if (i % 2 == 0){
-            numberNode.style.backgroundColor = "green";
+        numberNode.innerText = num;
+        if (num > 2){
+            let isPrime = primeGenerator(num);
         }
-        if (i % 2 == 1){
+        if (num % 2 == 0){
+            numberNode.style.backgroundColor = "green";
+        }else{
             numberNode.style.backgroundColor = "yellow";
         }
-        if (primes.includes(i)){
+        if (primes.includes(num)){
             numberNode.style.backgroundColor = "red";
         }
         div.appendChild(numberNode);
+    }
+    function resetInterval(){
+        addNumber(number);
+        clearInterval(timer);
+        let timer = setinterval(resetInterval, 500);
+    }
+    function primeGenerator(num){
+        for (let p of primes){
+            if (num % p == 0){
+                return false;
+            }
+        }
+        primes.push(num);
+        return true;
     }
 </script>
 <footer>
