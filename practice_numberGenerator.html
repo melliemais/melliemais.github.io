@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto;
+            padding: 1rem;
+            width: 20rem;
+        }
+    </style>
+</head>
+<body>
+    <h1> Numbers 0-100</h1>
+    <p> Precedence: Red if prime, yellow if odd, green if even</p>
+    <div id="container">
+    </div>
+    
+</body>
+<script>
+    let div = document.getElementById("container");
+    let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 79, 83, 89, 91, 97];
+    for (let i = 0; i <= 100; i++){
+        let numberNode = document.createElement("div");
+        numberNode.innerText = i;
+        if (i % 2 == 0){
+            numberNode.style.backgroundColor = "green";
+        }
+        if (i % 2 == 1){
+            numberNode.style.backgroundColor = "yellow";
+        }
+        if (primes.includes(i)){
+            numberNode.style.backgroundColor = "red";
+        }
+        div.appendChild(numberNode);
+    }
+</script>
+</html>
