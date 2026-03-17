@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fetch Dog Pics</title>
+    <meta charset="UTF-8" />
+    <style>
+        table,
+        th,
+        tr,
+        td {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>I ❤️ Dogs</h1>
+    <main>
+        <section id="app">
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>url</td>
+                        <td>Image</td>
+                    </tr>
+                </thead>
+                <tbody id="myTableBody"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script defer>
+        'use strict';
+        function createRow(id, url) {
+            const tr = document.createElement('tr');
+            const td_id = document.createElement('td');
+            td_id.appendChild(document.createTextNode(id));
+
+            const td_url = document.createElement('td');
+            td_url.appendChild(document.createTextNode(url));
+
+            const td_img = document.createElement('td');
+
+            const img = document.createElement('img');
+            img.src = url;
+            td_img.appendChild(img);
+
+            tr.appendChild(td_id);
+            tr.appendChild(td_url);
+            tr.appendChild(td_img);
+            tableBody.appendChild(tr);
+        }
+        const app = document.getElementById('app');
+        // Creating a new Element
+        const newElement = document.createTextNode('Hello, World!');
+        // Adding it as a Child
+        app.appendChild(newElement);
+
+        const tableBody = document.querySelector('tbody');
+        const sampleObj = {
+            id: 1,
+            url: 'https://images.dog.ceo/breeds/maltese/n02085936_3391.jpg',
+        };
+
+        createRow(1, 'https://images.dog.ceo/breeds/maltese/n02085936_3391.jpg');
+
+        // -- fetch here --
+        async function fetchDogPicsAsync() {
+            const url = 'https://dog.ceo/api/breeds/image/random';
+            const response = await fetch(url);
+            let data = await response.json();
+            console.log(data);
+            app.appendChild(document.createTextNode(JSON.stringify(data)));
+        }
+        //document.addEventListener("DOMContentLoaded", fetchDogPicsAsync);
+
+        // -- fetch here --
+        const url = 'https://dog.ceo/api/breeds/image/random';
+        const response = fetch(url)
+            .then((response) => response.json())
+            .then(processDogData);
+
+        function processDogData(data) {
+            console.log(data);
+            app.appendChild(document.createTextNode(JSON.stringify(data)));
+
+            createRow(5, data.message);
+        }
+
+    </script>
+</body>
+
+</html>
