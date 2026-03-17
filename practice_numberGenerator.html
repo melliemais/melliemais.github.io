@@ -9,7 +9,17 @@
             display: grid;
             grid-template-columns: auto auto auto auto auto auto;
             padding: 1rem;
-            width: 20rem;
+            width: 100%;
+            justify-content: center;
+        }
+        #cell{
+            text-align: center;
+            width: 4rem;
+            border: 0.1rem solid white;
+            font: 1rem "Comic Sans MS", sans-serif;
+        }
+        h1, p, footer{
+            font: 1rem "Comic Sans MS", sans-serif;
         }
     </style>
 </head>
@@ -25,6 +35,7 @@
     let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 79, 83, 89, 91, 97];
     for (let i = 0; i <= 100; i++){
         let numberNode = document.createElement("div");
+        numberNode.id = "cell";
         numberNode.innerText = i;
         if (i % 2 == 0){
             numberNode.style.backgroundColor = "green";
@@ -38,4 +49,7 @@
         div.appendChild(numberNode);
     }
 </script>
+<footer>
+    <a href="projects.html">Back to Project Portal</a>
+</footer>
 </html>
