@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Practice</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function finishPromise(resolve){
+
+    }
+    function waitThenResolve(resolve){
+    }
+    function handleResult(resolve){
+        console.log("handled");
+    }
+    function createPromise(resolve){
+        return new Promise(function(resolve, reject){
+            setTimeout(handleResult, 0, resolve);
+        })
+    }
+    let a = createPromise();
+    a.then(handleResult);
+
+    function orderExecutor(resolve, reject) {
+        console.log("1");
+        setTimeout(function () {
+            resolve("2");
+        }, 10000);
+        setTimeout(function(){
+            reject("no");
+        }, 2000);
+    }
+
+    let p1 = new Promise(orderExecutor);
+    p1.then(console.log)
+    .catch(console.log);
+    console.log("3");
+</script>
+</html>
