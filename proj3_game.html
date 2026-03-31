@@ -3,24 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="proj3_style.css">
     <title>Make Number Go Up</title>
 </head>
 <body>
     <h1>Make Number Go Up</h1>
-    <div id="number">0</div>
+    <h2><div id="number">0</div></h2>
     <div id="velocity">+0 / sec</div>
-    <button id="increment-btn">Increment</button>
+    <button id="increment-btn">Increment</button><br>
 
     <button id="reset-btn">Reset</button>
-    <p></p>
-    <button id="basicIncrementor-btn">Basic Incrementor   
+    <button id="export-btn">Export</button>
+    <button id="import-btn">Import</button><br>
+
+    <button id="basicIncrementor-btn" class="inc">Basic Incrementor   
         <div id="basicIncrementor-cost">Cost: 10</div>
-    <div id="basicIncrementor-quantity">Owned: 0</div>
+        <div id="basicIncrementor-quantity">Owned: 0</div>
+        <div id="basicIncrementor-production">Production: +1 / sec</div>
+    </button>
+    <button id="advIncrementor-btn" class="inc">Advanced Incrementor   
+        <div id="advIncrementor-cost">Cost: 100</div>
+        <div id="advIncrementor-quantity">Owned: 0</div>
+        <div id="advIncrementor-production">Production: +5 / sec</div>
+    </button>
+    <button id="expIncrementor-btn" class="inc">Expert Incrementor   
+        <div id="expIncrementor-cost">Cost: 1000</div>
+        <div id="expIncrementor-quantity">Owned: 0</div>
+        <div id="expIncrementor-production">Production: +25 / sec</div>
     </button>
     
 </body>
 <script src="proj3_main.js"></script>
 <footer>
-        <a href="projects.html">Back to Project Portal</a>
+        <br><a href="projects.html">Back to Project Portal</a>
 </footer>
 </html>
