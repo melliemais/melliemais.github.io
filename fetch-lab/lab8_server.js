@@ -125,7 +125,7 @@ app.get('/api/messages', (req, res) => {
 });
 
 app.post('/api/messages', (req, res) => {
-    fetch('/api/messages', headers: "POST", body: )
+    fetch('/api/messages')
 });
 
 // https://dl.acm.org/doi/epdf/10.1145/3485447.3512143
