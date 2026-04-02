@@ -1,5 +1,11 @@
 "use strict";
 
+let messages = [
+  { id: 1, text: "Welcome to the message board!", author: "Admin" },
+];
+
+let nextId = 2;
+
 const express = require('express');
 const app = express();
 
@@ -13,7 +19,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log('Server is running on port ${PORT}');
+    console.log('Server is running on port '+PORT);
 });
 
 // B.1
@@ -121,11 +127,25 @@ app.get('/api/unreliable', (req, res) => {
 // B.7
 
 app.get('/api/messages', (req, res) => {
-
+    res.type('json').send(messages);
 });
 
 app.post('/api/messages', (req, res) => {
-    fetch('/api/messages')
+    fetch('/api/messages', {method: 'POST'});
+    let text = req.query.text;
+    let author = req.query.author;
+    if (text != undefined && author != undefined){
+        let message = {
+            id: nextId,
+            text: text,
+            author: author
+        }
+        nextId++;
+        messages.push(message);
+    }else{
+        let message = res.status(400).json({error: "Message must have a text and an author."});
+    }
+    res.type('json').send(message);
 });
 
 // https://dl.acm.org/doi/epdf/10.1145/3485447.3512143
