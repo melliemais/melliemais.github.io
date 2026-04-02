@@ -4,34 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="proj3_style.css">
-    <title>Make Number Go Up</title>
+    <title>Cumulative Cumulation</title>
 </head>
 <body>
-    <h1>Make Number Go Up</h1>
+    <h1>Cumulative Cumulation</h1>
     <h2><div id="number">0</div></h2>
-    <div id="velocity">+0 / sec</div>
+    <h3><div id="velocity">+0 / sec</div></h3>
+    <div id="totalNumber" class="container">You have a feeling that you're missing something.</div>
     <button id="increment-btn">Increment</button><br>
 
     <button id="reset-btn">Reset</button>
     <button id="export-btn">Export</button>
     <button id="import-btn">Import</button><br>
 
-    <button id="basicIncrementor-btn" class="inc">Basic Incrementor   
+    <h3>Auto-Incrementors</h3>
+    <button id="basicIncrementor-btn" class="inc">Basic   
         <div id="basicIncrementor-cost">Cost: 10</div>
         <div id="basicIncrementor-quantity">Owned: 0</div>
         <div id="basicIncrementor-production">Production: +1 / sec</div>
     </button>
-    <button id="advIncrementor-btn" class="inc">Advanced Incrementor   
-        <div id="advIncrementor-cost">Cost: 100</div>
+    <button id="stdIncrementor-btn" class="inc">Standard   
+        <div id="stdIncrementor-cost">Cost: 100</div>
+        <div id="stdIncrementor-quantity">Owned: 0</div>
+        <div id="stdIncrementor-production">Production: +5 / sec</div>
+    </button>
+    <button id="advIncrementor-btn" class="inc">Advanced   
+        <div id="advIncrementor-cost">Cost: 1000</div>
         <div id="advIncrementor-quantity">Owned: 0</div>
-        <div id="advIncrementor-production">Production: +5 / sec</div>
+        <div id="advIncrementor-production">Production: +25 / sec</div>
     </button>
-    <button id="expIncrementor-btn" class="inc">Expert Incrementor   
-        <div id="expIncrementor-cost">Cost: 1000</div>
+    <button id="expIncrementor-btn" class="inc">Expert   
+        <div id="expIncrementor-cost">Cost: 10000</div>
         <div id="expIncrementor-quantity">Owned: 0</div>
-        <div id="expIncrementor-production">Production: +25 / sec</div>
+        <div id="expIncrementor-production">Production: +125 / sec</div>
     </button>
-    
+    <button id="masIncrementor-btn" class="inc">Master   
+        <div id="masIncrementor-cost">Cost: 100000</div>
+        <div id="masIncrementor-quantity">Owned: 0</div>
+        <div id="masIncrementor-production">Production: +625 / sec</div>
+    </button>
+    <h3>Manual Incrementors</h3>
 </body>
 <script src="proj3_main.js"></script>
 <footer>
