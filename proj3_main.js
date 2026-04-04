@@ -8,13 +8,16 @@ function buttons() {
     document.getElementById("import-btn").addEventListener("click", importFunction);
 
     document.getElementById("increment-btn").addEventListener("click", function () {
-        increment("number", 1);
+        increment("number", parseFloat(localStorage.getItem("click")));
     });
 
     for (let i of ranks) {
         document.getElementById(i + "Incrementor-btn").addEventListener("click", function () {
             attemptBuy(i+"Incrementor");
-        })
+        });
+        document.getElementById(i + "Clicker-btn").addEventListener("click", function () {
+            attemptBuy(i+"Clicker");
+        });
     }
 }
 
@@ -84,25 +87,19 @@ function refresh() {
 
     setContent("number", displayNumber("number"));
     setContent("velocity", "+" + displayNumber("velocity") + " / sec");
+    setContent("click", "+" + displayNumber("click") + " / click");
 
     for (let i of ranks) {
         setContent(i + "Incrementor-quantity", "Owned: " + displayNumber(i + "Incrementor-quantity"));
         setContent(i + "Incrementor-cost", "Cost: " + displayNumber(i + "Incrementor-cost"));
-        setContent(i + "Incrementor-production", "Produces: +" + displayNumber(i + "Incrementor-production") + " / sec");
+        setContent(i + "Incrementor-production", "+" + displayNumber(i + "Incrementor-production") + " / sec");
+
+        setContent(i + "Clicker-quantity", "Owned: " + displayNumber(i + "Clicker-quantity"));
+        setContent(i + "Clicker-cost", "Cost: " + displayNumber(i + "Clicker-cost"));
+        setContent(i + "Clicker-production", "+" + displayNumber(i + "Clicker-production") + " / click");
     }
-
-    let totalNumber = localStorage.getItem("totalNumber");
-
-    if (totalNumber < 100) {
-        setContent("totalNumber", "You have a feeling that you're missing something.");
-    } else if (totalNumber < 1000) {
-        setContent("totalNumber", "True, your number has increased, but the world around you still feels off.");
-    } else if (totalNumber < 10000) {
-        setContent("totalNumber", "You've started to figure things out. It's not here; it's the remainder of the web.");
-    } else if (totalNumber < 100000) {
-        setContent("totalNumber", "The outside world is a scary place. Are you willing to venture out into it?");
-    }
-
+    
+    newsRender();
 }
 
 function setContent(id, toText) {
@@ -125,47 +122,67 @@ function reset() {
     localStorage.setItem("totalNumber", 0);
     localStorage.setItem("velocity", 0);
     localStorage.setItem("click", 1);
+    localStorage.setItem("news", news[0]);
 
     for (let i = 0; i < ranks.length; i++) {
         localStorage.setItem(ranks[i] + "Incrementor-quantity", 0);
-        localStorage.setItem(ranks[i] + "Incrementor-cost", Math.pow(10, i + 1));
-        localStorage.setItem(ranks[i] + "Incrementor-production", Math.pow(5, i));
+        localStorage.setItem(ranks[i] + "Incrementor-cost", Math.pow(9, i + 1));
+        localStorage.setItem(ranks[i] + "Incrementor-production", Math.pow(6, i));
+        localStorage.setItem(ranks[i] + "Clicker-quantity", 0);
+        localStorage.setItem(ranks[i] + "Clicker-cost", Math.pow(10, i + 1));
+        localStorage.setItem(ranks[i] + "Clicker-production", Math.pow(5, i));
     }
-
-    localStorage.setItem("basicClicker-quantity", 0);
-    localStorage.setItem("basicClicker-cost", 10);
-    localStorage.setItem("basicClicker-production", 1);
-
-    localStorage.setItem("stdClicker-quantity", 0);
-    localStorage.setItem("stdClicker-cost", 100);
-    localStorage.setItem("stdClicker-production", 5);
-
-    localStorage.setItem("advClicker-quantity", 0);
-    localStorage.setItem("advClicker-cost", 1000);
-    localStorage.setItem("advClicker-production", 25);
-
-    localStorage.setItem("expClicker-quantity", 0);
-    localStorage.setItem("expClicker-cost", 10000);
-    localStorage.setItem("expClicker-production", 125);
-
-    localStorage.setItem("masClicker-quantity", 0);
-    localStorage.setItem("masClicker-cost", 100000);
-    localStorage.setItem("masClicker-production", 625);
 
 }
 
 function adjustVelocity() {
     let velocity = 0;
+    let click = 1;
     for (let i of ranks) {
         velocity += parseFloat(localStorage.getItem(i + "Incrementor-production") * parseInt(localStorage.getItem(i + "Incrementor-quantity")));
+        click += parseFloat(localStorage.getItem(i+"Clicker-production") * parseInt(localStorage.getItem(i+"Clicker-quantity")))
     }
     localStorage.setItem("velocity", velocity);
+    localStorage.setItem("click", click);
 }
 
+function newsRender(){
+    let totalNumber = localStorage.getItem("totalNumber");
+
+    let newsNumber = Math.floor(Math.log10(totalNumber)) - 1;
+    if (newsNumber <= 0 || totalNumber == 0){
+        setContent("news", news[0]);
+    } else if (newsNumber >= news.length){
+        setContent("news", news[news.length-1]);
+    } else{
+        setContent("news", news[newsNumber]);
+    }
+    
+
+}
+
+let ranks = ["basic", "std", "int", "adv", "exp", "mas"];
+let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
+let news = [
+    "You have a feeling that you're missing something.",
+    "True, your number has increased, but the world around you still feels off.",
+    "You've started to figure things out. It's not here; it's the remainder of the web.",
+    "The outside world is a scary place. Are you willing to venture out into it?",
+    "Perhaps that is not what you want. This game will be here for you.",
+    "One million. If you were to count all the way to the number you've reached, it would take days.",
+    "Your number approaches the population of the average country.",
+    "You have crossed the myriad squared threshold. The \"myraid\" is a counting unit used by East Asian countries, which is equal to 10,000.",
+    "If you were one in a billion, there would be about 7 others like you. It's hard to feel unique in that regard.",
+    "Ten to the ten. You might be wondering how much longer this will go on for.",
+    "If the human population on Earth reached this number, it would go down from there QUICKLY. Glad that's not the case.",
+    "One trillion. That's quite the benchmark, but you fear others will reach it in units that actually matter.",
+    "In the Indian numbering system, you have more than a nil. Who would ever use units that high in everyday life?",
+    "You have a number that just eclipsed the GDP of the world in US dollars.",
+    "One quadrillion. The number of references to comparable real-world values are dwindling. Will that be enough for you?"
+]
 let INTERVAL = 100;
 let refreshRate = setInterval(refresh, 0);
 let gainRate = setInterval(gain, INTERVAL);
-let ranks = ["basic", "std", "adv", "exp", "mas"];
-let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
+
 
 buttons();

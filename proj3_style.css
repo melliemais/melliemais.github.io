@@ -28,9 +28,16 @@ button {
 }
 
 .inc{
-    background-color: tan;
+    background-color: rgb(210, 183, 140);
     color: black;
 }
 .inc:hover {
-    background-color: rgb(168, 143, 110);
+    background-color: rgb(183, 160, 122);
+}
+.cli{
+    background-color: rgb(140, 210, 204);
+    color: black;
+}
+.cli:hover {
+    background-color: rgb(121, 182, 177);
 }
