@@ -11,14 +11,6 @@ function buttons() {
         increment("number", parseFloat(localStorage.getItem("click")));
     });
 
-    for (let i of ranks) {
-        document.getElementById(i + "Incrementor-btn").addEventListener("click", function () {
-            attemptBuy(i+"Incrementor");
-        });
-        document.getElementById(i + "Clicker-btn").addEventListener("click", function () {
-            attemptBuy(i+"Clicker");
-        });
-    }
 }
 
 function increment(item, amt) {
@@ -86,17 +78,17 @@ function refresh() {
     }
 
     setContent("number", displayNumber("number"));
-    setContent("velocity", "+" + displayNumber("velocity") + " / sec");
-    setContent("click", "+" + displayNumber("click") + " / click");
+    setContent("velocity", + displayNumber("velocity") + " / sec");
+    setContent("click", + displayNumber("click") + " / click");
 
     for (let i of ranks) {
-        setContent(i + "Incrementor-quantity", "Owned: " + displayNumber(i + "Incrementor-quantity"));
-        setContent(i + "Incrementor-cost", "Cost: " + displayNumber(i + "Incrementor-cost"));
-        setContent(i + "Incrementor-production", "+" + displayNumber(i + "Incrementor-production") + " / sec");
+        setContent(i + "Incrementor-quantity", displayNumber(i + "Incrementor-quantity") + " owned");
+        setContent(i + "Incrementor-cost", displayNumber(i + "Incrementor-cost"));
+        setContent(i + "Incrementor-production", displayNumber(i + "Incrementor-production") + " / sec");
 
-        setContent(i + "Clicker-quantity", "Owned: " + displayNumber(i + "Clicker-quantity"));
-        setContent(i + "Clicker-cost", "Cost: " + displayNumber(i + "Clicker-cost"));
-        setContent(i + "Clicker-production", "+" + displayNumber(i + "Clicker-production") + " / click");
+        setContent(i + "Clicker-quantity", displayNumber(i + "Clicker-quantity") + " owned");
+        setContent(i + "Clicker-cost", displayNumber(i + "Clicker-cost"));
+        setContent(i + "Clicker-production", displayNumber(i + "Clicker-production") + " / click");
     }
     
     newsRender();
@@ -118,26 +110,27 @@ function reset() {
 
     localStorage.clear();
 
-    localStorage.setItem("number", 0);
-    localStorage.setItem("totalNumber", 0);
+    localStorage.setItem("number", 10);
+    localStorage.setItem("totalNumber", 10);
     localStorage.setItem("velocity", 0);
-    localStorage.setItem("click", 1);
+    localStorage.setItem("click", 0);
     localStorage.setItem("news", news[0]);
 
     for (let i = 0; i < ranks.length; i++) {
         localStorage.setItem(ranks[i] + "Incrementor-quantity", 0);
-        localStorage.setItem(ranks[i] + "Incrementor-cost", Math.pow(9, i + 1));
-        localStorage.setItem(ranks[i] + "Incrementor-production", Math.pow(6, i));
+        localStorage.setItem(ranks[i] + "Incrementor-cost", Math.pow(8, i) * 10);
+        localStorage.setItem(ranks[i] + "Incrementor-production", Math.pow(5, i));
+
         localStorage.setItem(ranks[i] + "Clicker-quantity", 0);
         localStorage.setItem(ranks[i] + "Clicker-cost", Math.pow(10, i + 1));
-        localStorage.setItem(ranks[i] + "Clicker-production", Math.pow(5, i));
+        localStorage.setItem(ranks[i] + "Clicker-production", Math.pow(6, i));
     }
 
 }
 
 function adjustVelocity() {
     let velocity = 0;
-    let click = 1;
+    let click = 0;
     for (let i of ranks) {
         velocity += parseFloat(localStorage.getItem(i + "Incrementor-production") * parseInt(localStorage.getItem(i + "Incrementor-quantity")));
         click += parseFloat(localStorage.getItem(i+"Clicker-production") * parseInt(localStorage.getItem(i+"Clicker-quantity")))
@@ -161,7 +154,79 @@ function newsRender(){
 
 }
 
-let ranks = ["basic", "std", "int", "adv", "exp", "mas"];
+/** Assembles the button GUI. */
+
+function guiSetUp(){
+
+    let incrementors = document.getElementById("incrementors");
+    
+    /** Incrementors */
+
+    for (let r = 0; r < ranks.length; r++){
+
+        let i = document.createElement("button");
+        i.id = ranks[r]+"Incrementor";
+        i.classList.add("inc");
+        i.innerHTML = visualRanks[r];
+
+        let cost = document.createElement("div");
+        cost.id = ranks[r]+"Incrementor-cost";
+        cost.innerHTML = "Cost: ?";
+
+        let owned = document.createElement("div");
+        owned.id = ranks[r]+"Incrementor-quantity";
+        owned.innerHTML = "? owned";
+
+        let production = document.createElement("div");
+        production.id = ranks[r]+"Incrementor-production";
+        production.innerHTML = "+? / sec";
+
+        i.addEventListener("click", function () {
+            attemptBuy(ranks[r]+"Incrementor");
+        })
+
+        incrementors.appendChild(i);
+        i.appendChild(cost);
+        i.appendChild(owned);
+        i.appendChild(production);
+    }
+
+    let clickers = document.getElementById("clickers");
+
+    /** Clickers */
+
+    for (let r = 0; r < ranks.length; r++){
+        let c = document.createElement("button");
+        c.id = ranks[r]+"Clicker-btn";
+        c.classList.add("cli");
+        c.innerHTML = visualRanks[r];
+
+        let cCost = document.createElement("div");
+        cCost.id = ranks[r]+"Clicker-cost";
+        cCost.innerHTML = "Cost: ?";
+
+        let cOwned = document.createElement("div");
+        cOwned.id = ranks[r]+"Clicker-quantity";
+        cOwned.innerHTML = "? owned";
+
+        let cProduction = document.createElement("div");
+        cProduction.id = ranks[r]+"Clicker-production";
+        cProduction.innerHTML = "+? / sec";
+
+        c.addEventListener("click", function () {
+            attemptBuy(ranks[r]+"Clicker");
+        })
+
+        clickers.appendChild(c);
+        c.appendChild(cCost);
+        c.appendChild(cOwned);
+        c.appendChild(cProduction);
+    }
+    
+}
+
+let ranks = ["bg", "basic", "std", "int", "adv", "exp", "mas", "gm", "cha"];
+let visualRanks = ["Beginner", "Basic", "Standard", "Intermediate", "Advanced", "Expert", "Master", "Grandmaster", "Champion"];
 let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
 let news = [
     "You have a feeling that you're missing something.",
@@ -180,9 +245,10 @@ let news = [
     "You have a number that just eclipsed the GDP of the world in US dollars.",
     "One quadrillion. The number of references to comparable real-world values are dwindling. Will that be enough for you?"
 ]
+
 let INTERVAL = 100;
 let refreshRate = setInterval(refresh, 0);
 let gainRate = setInterval(gain, INTERVAL);
 
-
+guiSetUp();
 buttons();
