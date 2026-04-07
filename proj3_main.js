@@ -87,7 +87,7 @@ function refresh() {
 
     localStorage.setItem("time", newTime);
 
-    if (gap > 60000){
+    if (gap > 60000 && localStorage.getItem("time") != NaN){
         alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain(gap)));
     } else{
         gain(gap);
