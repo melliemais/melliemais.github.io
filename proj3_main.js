@@ -13,23 +13,6 @@ function buttons() {
 
 }
 
-function increment(item, amt) {
-    localStorage.setItem(item, parseFloat(localStorage.getItem(item)) + amt);
-    if (item == "number") {
-        increment("totalNumber", amt);
-    }
-}
-
-function attemptBuy(item) {
-    let cost = parseInt(localStorage.getItem(item + "-cost"));
-    if (parseInt(localStorage.getItem("number")) >= cost) {
-        increment(item + "-quantity", 1);
-        localStorage.setItem(item + "-cost", Math.ceil(cost * 1.1));
-        pay(cost);
-    }
-    adjustVelocity();
-}
-
 function exportFunction() {
     console.log(JSON.stringify(localStorage));
 }
@@ -42,7 +25,11 @@ function importFunction() {
         try {
             importFile = JSON.parse(importFile);
             for (let attribute in localStorage) {
-                localStorage.setItem(attribute, importFile[attribute]);
+                if (importFile[attribute] != undefined){
+                    localStorage.setItem(attribute, importFile[attribute]);
+                } else{
+                    console.warn(attribute + " is undefined.");
+                }
             }
             //localStorage = importFile;
         }
@@ -52,59 +39,80 @@ function importFunction() {
     }
 }
 
-function pay(cost) {
-    localStorage.setItem("number", parseInt(localStorage.getItem("number")) - cost);
-}
+/** The function responsible for displaying variables. */
 
-function displayNumber(amt) {
+function displayItem(item) {
 
-    let float = localStorage.getItem(amt);
+    let float = parseFloat(localStorage.getItem(item));
     let power = Math.floor(Math.floor(Math.log10(float)) / 3);
 
     let roundAmt = Math.floor(float * 10) / 10;
     let roundedFigs = Math.floor(float / Math.pow(1000, power) * 100) / 100;
 
     if (float >= 1000) {
-        return roundedFigs + amts[power - 1];
+        return roundedFigs + "" + amts[power - 1];
     } else {
         return roundAmt;
     }
 }
 
+/** The function responsible for displaying numbers. */
+
+function displayNumber(amt) {
+
+    let float = amt;
+    let power = Math.floor(Math.floor(Math.log10(float)) / 3);
+
+    let roundAmt = Math.floor(float * 10) / 10;
+    let roundedFigs = Math.floor(float / Math.pow(1000, power) * 100) / 100;
+
+    if (float >= 1000) {
+        return roundedFigs + "" + amts[power - 1];
+    } else {
+        return roundAmt;
+    }
+}
+
+/** Fixes the GUI based on what happens in-game. */
+
 function refresh() {
 
-    if (localStorage.getItem("velocity") === null) {
-        reset();
+    setContent("number", displayItem("number"));
+    setContent("velocity", displayItem("velocity") + " / sec");
+    setContent("click", displayItem("click") + " / click");
+
+    let newTime = new Date().getTime();
+
+    let gap = newTime - localStorage.getItem("time");
+
+    localStorage.setItem("time", newTime);
+
+    if (gap > 60000){
+        alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain(gap)));
+    } else{
+        gain(gap);
     }
 
-    setContent("number", displayNumber("number"));
-    setContent("velocity", + displayNumber("velocity") + " / sec");
-    setContent("click", + displayNumber("click") + " / click");
-
     for (let i of ranks) {
-        setContent(i + "Incrementor-quantity", displayNumber(i + "Incrementor-quantity") + " owned");
-        setContent(i + "Incrementor-cost", displayNumber(i + "Incrementor-cost"));
-        setContent(i + "Incrementor-production", displayNumber(i + "Incrementor-production") + " / sec");
+        setContent(i + "Incrementor-quantity", displayItem(i + "Incrementor-quantity") + " owned");
+        setContent(i + "Incrementor-cost", displayItem(i + "Incrementor-cost"));
+        setContent(i + "Incrementor-production", displayItem(i + "Incrementor-production") + " / sec");
 
-        setContent(i + "Clicker-quantity", displayNumber(i + "Clicker-quantity") + " owned");
-        setContent(i + "Clicker-cost", displayNumber(i + "Clicker-cost"));
-        setContent(i + "Clicker-production", displayNumber(i + "Clicker-production") + " / click");
+        setContent(i + "Clicker-quantity", displayItem(i + "Clicker-quantity") + " owned");
+        setContent(i + "Clicker-cost", displayItem(i + "Clicker-cost"));
+        setContent(i + "Clicker-production", displayItem(i + "Clicker-production") + " / click");
     }
     
     newsRender();
 }
 
+/** The function responsible for changing the text content of an element in the HTML. */
+
 function setContent(id, toText) {
     document.getElementById(id).textContent = toText;
 }
 
-function gain() {
-    let gain = parseFloat(localStorage.getItem("velocity") / (1000 / INTERVAL));
-    increment("number", gain);
-
-    let exportFile = JSON.stringify(localStorage);
-    refresh();
-}
+/** Resets the game. Useful for dealing with invalid files. */
 
 function reset() {
 
@@ -126,7 +134,11 @@ function reset() {
         localStorage.setItem(ranks[i] + "Clicker-production", Math.pow(6, i));
     }
 
+    localStorage.setItem("time", (new Date()).getTime());
+
 }
+
+/** Sets your velocity and click power according to what you purchased. */
 
 function adjustVelocity() {
     let velocity = 0;
@@ -138,6 +150,45 @@ function adjustVelocity() {
     localStorage.setItem("velocity", velocity);
     localStorage.setItem("click", click);
 }
+
+/** Increases your number by your velocity, multiplied by time elapsed. */
+
+function gain(elapsed) {
+    if (localStorage.getItem("velocity") == 0) return;
+    let gain = parseFloat(localStorage.getItem("velocity")) * (elapsed / 1000);
+    increment("number", gain);
+
+    return gain;
+}
+
+/** Occurs when clicking on a button or incrementor. Successful if your number >= its cost. */
+
+function attemptBuy(item) {
+    let cost = parseInt(localStorage.getItem(item + "-cost"));
+    if (parseInt(localStorage.getItem("number")) >= cost) {
+        increment(item + "-quantity", 1);
+        localStorage.setItem(item + "-cost", Math.ceil(cost * 1.1));
+        pay(cost);
+    }
+    adjustVelocity();
+}
+
+/** Decreases your number by the cost of an item. */
+
+function pay(cost) {
+    localStorage.setItem("number", parseInt(localStorage.getItem("number")) - cost);
+}
+
+/** The function responsible for increasing numbers of any kind. */
+
+function increment(item, amt) {
+    localStorage.setItem(item, parseFloat(localStorage.getItem(item)) + amt);
+    if (item == "number") {
+        increment("totalNumber", amt);
+    }
+}
+
+/** Adjusts the news GUI to your total number. */
 
 function newsRender(){
     let totalNumber = localStorage.getItem("totalNumber");
@@ -157,8 +208,6 @@ function newsRender(){
 /** Assembles the button GUI. */
 
 function guiSetUp(){
-
-    let incrementors = document.getElementById("incrementors");
     
     /** Incrementors */
 
@@ -190,8 +239,6 @@ function guiSetUp(){
         i.appendChild(owned);
         i.appendChild(production);
     }
-
-    let clickers = document.getElementById("clickers");
 
     /** Clickers */
 
@@ -230,25 +277,21 @@ let visualRanks = ["Beginner", "Basic", "Standard", "Intermediate", "Advanced", 
 let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
 let news = [
     "You have a feeling that you're missing something.",
-    "True, your number has increased, but the world around you still feels off.",
-    "You've started to figure things out. It's not here; it's the remainder of the web.",
-    "The outside world is a scary place. Are you willing to venture out into it?",
-    "Perhaps that is not what you want. This game will be here for you.",
-    "One million. If you were to count all the way to the number you've reached, it would take days.",
-    "Your number approaches the population of the average country.",
-    "You have crossed the myriad squared threshold. The \"myraid\" is a counting unit used by East Asian countries, which is equal to 10,000.",
-    "If you were one in a billion, there would be about 7 others like you. It's hard to feel unique in that regard.",
-    "Ten to the ten. You might be wondering how much longer this will go on for.",
-    "If the human population on Earth reached this number, it would go down from there QUICKLY. Glad that's not the case.",
-    "One trillion. That's quite the benchmark, but you fear others will reach it in units that actually matter.",
-    "In the Indian numbering system, you have more than a nil. Who would ever use units that high in everyday life?",
-    "You have a number that just eclipsed the GDP of the world in US dollars.",
-    "One quadrillion. The number of references to comparable real-world values are dwindling. Will that be enough for you?"
+    "The increase of this number has delivered a sense of satisfaction, but not a major one.",
+    "As you further ascend, you start to wonder if this game will satisfy that missing sensation.",
+    "Maybe something can be found outside of this game.",
+    "Maybe that is not what you want. Regardless, this game will be here for you.",
+    "Your number climbs further, and you start to realize something. This is getting pretty repetitive.",
+    "Your number approaches the population of the average country. It took long enough to the point where the outside world doesn't look so bad.",
+    "You begin to analyze the cost to risk ratio of playing this game and comparing it to doing anything else.",
+    "Will you stick around, or are you going to soak in the light that is reality?"
 ]
 
-let INTERVAL = 100;
-let refreshRate = setInterval(refresh, 0);
-let gainRate = setInterval(gain, INTERVAL);
+let INTERVAL = 33;
+let refreshRate = setInterval(refresh, INTERVAL);
+
+let incrementors = document.getElementById("incrementors");
+let clickers = document.getElementById("clickers");
 
 guiSetUp();
 buttons();

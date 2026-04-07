@@ -9,9 +9,10 @@ let nextId = 2;
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 app.use(express.static('public'));
 
-app.use(express.json());
 
 // endpoints
 
@@ -131,11 +132,18 @@ app.get('/api/messages', (req, res) => {
 });
 
 app.post('/api/messages', (req, res) => {
-    fetch('/api/messages', {method: 'POST'});
+    fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
     let text = req.query.text;
     let author = req.query.author;
+    let message;
     if (text != undefined && author != undefined){
-        let message = {
+        message = {
             id: nextId,
             text: text,
             author: author
@@ -143,7 +151,7 @@ app.post('/api/messages', (req, res) => {
         nextId++;
         messages.push(message);
     }else{
-        let message = res.status(400).json({error: "Message must have a text and an author."});
+        message = res.status(400).json({error: "Message must have a text and an author."});
     }
     res.type('json').send(message);
 });

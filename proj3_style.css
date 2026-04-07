@@ -27,6 +27,14 @@ button {
     margin-top: 30px;
 }
 
+.reset{
+    background-color: rgb(155, 32, 32);
+}
+
+.reset:hover{
+    background-color: rgb(123, 25, 25);
+}
+
 .inc{
     background-color: rgb(210, 183, 140);
     color: black;
