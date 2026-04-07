@@ -77,6 +77,10 @@ function displayNumber(amt) {
 
 function refresh() {
 
+    if (localStorage.getItem("time") == NaN){
+        reset();
+    }
+
     setContent("number", displayItem("number"));
     setContent("velocity", displayItem("velocity") + " / sec");
     setContent("click", displayItem("click") + " / click");
@@ -87,7 +91,7 @@ function refresh() {
 
     localStorage.setItem("time", newTime);
 
-    if (gap > 60000 && localStorage.getItem("time") != NaN){
+    if (gap > 60000){
         alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain(gap)));
     } else{
         gain(gap);
