@@ -77,7 +77,7 @@ function displayNumber(amt) {
 
 function refresh() {
 
-    if (localStorage.getItem("totalNumber") == NaN){
+    if (localStorage.totalNumber == null){
         reset();
     }
 
