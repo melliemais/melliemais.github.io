@@ -30,13 +30,12 @@ function importFunction(data){
     let importFile = JSON.parse(data);
     try {
             for (let attribute in localStorage) {
-                if (importFile[attribute] != undefined && importFile[attribute] != NaN && importFile[attribute] != null){
+                if (isValid(importFile[attribute])){
                     localStorage.attribute = importFile[attribute];
                 } else{
-                    console.warn(attribute + " is undefined.");
+                    console.warn(attribute + " did not have a valid value.");
                 }
             }
-            //localStorage = importFile;
         }
         catch {
             alert("Not a valid file.");
@@ -81,13 +80,7 @@ function displayNumber(amt) {
 
 function refresh() {
 
-    
-
-    if (localStorage.length == 0){
-        reset();
-    } else{
-        validate();
-    }
+    validate();
 
     setContent("number", displayItem("number"));
     setContent("velocity", displayItem("velocity") + " / sec");
@@ -152,48 +145,43 @@ function reset() {
 
 function validate(){
 
-    let v = JSON.stringify(localStorage);
-    reset();
-    importFunction(v);
-
-    console.log(v);
-
-    /** 
-
-    if (localStorage.number == "null" || localStorage.number == "NaN"){
+    if (!isValid(localStorage.number)){
         localStorage.number = 10;
     }
-    if (localStorage.totalNumber == "null"|| localStorage.totalNumber == "NaN"){
+    if (!isValid(localStorage.totalNumber)){
         localStorage.totalNumber = 10;
     }
-    if (localStorage.velocity == "null" || localStorage.velocity == "NaN"){
+    if (!isValid(localStorage.velocity)){
         localStorage.velocity = 0;
-    } else if (localStorage.click == "null" || localStorage.velocity == "NaN"){
+    } else if (!isValid(localStorage.click)){
         localStorage.click = 0;
     }
-    if (localStorage.news == "null"){
+    if (!isValid(localStorage.news)){
         localStorage.news = news[0];
+    }
+    if (!isValid(localStorage.time)){
+        localStorage.time = new Date().getTime();
     }
 
     for (let i = 0; i < ranks.length; i++){
-        if (localStorage[ranks[i]+"Incrementor-quantity"] == "NaN" ||
-        localStorage[ranks[i]+"Incrementor-quantity"] == "null")
-            {
+        if (!isValid(localStorage[ranks[i]+"Incrementor-quantity"]))
+        {
             localStorage[ranks[i] + "Incrementor-quantity"] = 0;
             localStorage[ranks[i] + "Incrementor-cost"] =  Math.pow(8, i) * 10;
             localStorage[ranks[i] + "Incrementor-production"] = Math.pow(5, i);
         }
-        if (localStorage[ranks[i]+"Clicker-quantity"] == "NaN" ||
-        localStorage[ranks[i]+"Clicker-quantity"] == "null")
-            {
+        if (!isValid(localStorage[ranks[i]+"Clicker-quantity"]))
+        {
             localStorage[ranks[i] + "Clicker-quantity"] = 0;
-            localStorage[ranks[i] + "Clicker-cost"] =  Math.pow(8, i) * 10;
-            localStorage[ranks[i] + "Clicker-production"] = Math.pow(5, i);
+            localStorage[ranks[i] + "Clicker-cost"] =  Math.pow(10, i + 1);
+            localStorage[ranks[i] + "Clicker-production"] = Math.pow(6, i);
         }
     }
 
-    */
+}
 
+function isValid(value){
+    return !(value === null || isNaN(value) || value === undefined);
 }
 
 /** Sets your velocity and click power according to what you purchased. */
@@ -212,8 +200,8 @@ function adjustVelocity() {
 /** Increases your number by your velocity, multiplied by time elapsed. */
 
 function gain(elapsed) {
-    if (localStorage.getItem("velocity") == 0) return;
-    let gain = parseFloat(localStorage.getItem("velocity")) * (elapsed / 1000);
+    if (localStorage.velocity == 0) return 0;
+    let gain = parseFloat(localStorage.velocity) * (elapsed / 1000);
     increment("number", gain);
 
     return gain;
@@ -330,8 +318,8 @@ function guiSetUp(){
     
 }
 
-let ranks = ["bg", "basic", "std", "int", "adv", "exp", "mas", "gm", "cha"];
-let visualRanks = ["Beginner", "Basic", "Standard", "Intermediate", "Advanced", "Expert", "Master", "Grandmaster", "Champion"];
+let ranks = ["nov", "beg", "std", "prof", "int", "adv", "exp", "mas", "gm", "cha"];
+let visualRanks = ["Novice", "Beginner", "Standard", "Proficient", "Intermediate", "Advanced", "Expert", "Master", "Grandmaster", "Champion"];
 let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
 let news = [
     "You have a feeling that you're missing something.",
