@@ -132,15 +132,19 @@ app.get('/api/messages', (req, res) => {
 });
 
 app.post('/api/messages', (req, res) => {
-    fetch('/api/messages', {
+
+    /**
+     *     fetch('/api/messages', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             }
         }
     );
-    let text = req.query.text;
-    let author = req.query.author;
+     */
+    console.log(req.body);
+    let text = req.body.text;
+    let author = req.body.author;
     let message;
     if (text != undefined && author != undefined){
         message = {

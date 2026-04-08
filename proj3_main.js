@@ -5,7 +5,7 @@ function buttons() {
 
     document.getElementById("export-btn").addEventListener("click", exportFunction);
 
-    document.getElementById("import-btn").addEventListener("click", importFunction);
+    document.getElementById("import-btn").addEventListener("click", importPrompt);
 
     document.getElementById("increment-btn").addEventListener("click", function () {
         increment("number", parseFloat(localStorage.getItem("click")));
@@ -17,16 +17,21 @@ function exportFunction() {
     console.log(JSON.stringify(localStorage));
 }
 
-function importFunction() {
+function importPrompt() {
     let importFile = prompt("Insert your savefile here...");
     if (importFile == null || importFile == "") {
         alert("Import cannot be empty.")
     } else {
-        try {
-            importFile = JSON.parse(importFile);
+        importFunction(importFile);
+    }
+}
+
+function importFunction(data){
+    let importFile = JSON.parse(data);
+    try {
             for (let attribute in localStorage) {
-                if (importFile[attribute] != undefined){
-                    localStorage.setItem(attribute, importFile[attribute]);
+                if (importFile[attribute] != undefined && importFile[attribute] != NaN && importFile[attribute] != null){
+                    localStorage.attribute = importFile[attribute];
                 } else{
                     console.warn(attribute + " is undefined.");
                 }
@@ -36,7 +41,6 @@ function importFunction() {
         catch {
             alert("Not a valid file.");
         }
-    }
 }
 
 /** The function responsible for displaying variables. */
@@ -77,8 +81,12 @@ function displayNumber(amt) {
 
 function refresh() {
 
-    if (localStorage.totalNumber == null){
+    
+
+    if (localStorage.length == 0){
         reset();
+    } else{
+        validate();
     }
 
     setContent("number", displayItem("number"));
@@ -122,23 +130,69 @@ function reset() {
 
     localStorage.clear();
 
-    localStorage.setItem("number", 10);
-    localStorage.setItem("totalNumber", 10);
-    localStorage.setItem("velocity", 0);
-    localStorage.setItem("click", 0);
-    localStorage.setItem("news", news[0]);
+    localStorage.number = 10;
+    localStorage.totalNumber = 10;
+    localStorage.velocity = 0;
+    localStorage.click = 0;
+    localStorage.news = news[0];
 
     for (let i = 0; i < ranks.length; i++) {
-        localStorage.setItem(ranks[i] + "Incrementor-quantity", 0);
-        localStorage.setItem(ranks[i] + "Incrementor-cost", Math.pow(8, i) * 10);
-        localStorage.setItem(ranks[i] + "Incrementor-production", Math.pow(5, i));
+        localStorage[ranks[i] + "Incrementor-quantity"] = 0;
+        localStorage[ranks[i] + "Incrementor-cost"] =  Math.pow(8, i) * 10;
+        localStorage[ranks[i] + "Incrementor-production"] = Math.pow(5, i);
 
-        localStorage.setItem(ranks[i] + "Clicker-quantity", 0);
-        localStorage.setItem(ranks[i] + "Clicker-cost", Math.pow(10, i + 1));
-        localStorage.setItem(ranks[i] + "Clicker-production", Math.pow(6, i));
+        localStorage[ranks[i] + "Clicker-quantity"] = 0;
+        localStorage[ranks[i] + "Clicker-cost"] = Math.pow(10, i + 1);
+        localStorage[ranks[i] + "Clicker-production"] = Math.pow(6, i);
     }
 
-    localStorage.setItem("time", (new Date()).getTime());
+    localStorage.time = new Date().getTime();
+
+}
+
+function validate(){
+
+    let v = JSON.stringify(localStorage);
+    reset();
+    importFunction(v);
+
+    console.log(v);
+
+    /** 
+
+    if (localStorage.number == "null" || localStorage.number == "NaN"){
+        localStorage.number = 10;
+    }
+    if (localStorage.totalNumber == "null"|| localStorage.totalNumber == "NaN"){
+        localStorage.totalNumber = 10;
+    }
+    if (localStorage.velocity == "null" || localStorage.velocity == "NaN"){
+        localStorage.velocity = 0;
+    } else if (localStorage.click == "null" || localStorage.velocity == "NaN"){
+        localStorage.click = 0;
+    }
+    if (localStorage.news == "null"){
+        localStorage.news = news[0];
+    }
+
+    for (let i = 0; i < ranks.length; i++){
+        if (localStorage[ranks[i]+"Incrementor-quantity"] == "NaN" ||
+        localStorage[ranks[i]+"Incrementor-quantity"] == "null")
+            {
+            localStorage[ranks[i] + "Incrementor-quantity"] = 0;
+            localStorage[ranks[i] + "Incrementor-cost"] =  Math.pow(8, i) * 10;
+            localStorage[ranks[i] + "Incrementor-production"] = Math.pow(5, i);
+        }
+        if (localStorage[ranks[i]+"Clicker-quantity"] == "NaN" ||
+        localStorage[ranks[i]+"Clicker-quantity"] == "null")
+            {
+            localStorage[ranks[i] + "Clicker-quantity"] = 0;
+            localStorage[ranks[i] + "Clicker-cost"] =  Math.pow(8, i) * 10;
+            localStorage[ranks[i] + "Clicker-production"] = Math.pow(5, i);
+        }
+    }
+
+    */
 
 }
 
