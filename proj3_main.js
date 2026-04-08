@@ -42,7 +42,7 @@ function importFunction(data){
         }
 }
 
-/** The function responsible for displaying numbers. */
+/** The function responsible for displaying values. */
 
 function displayItem(item) {
 
@@ -161,9 +161,6 @@ function validate(){
     } else if (!isValid(localStorage.click)){
         localStorage.click = 0;
     }
-    if (!isValid(localStorage.news)){
-        localStorage.news = news[0];
-    }
     if (!isValid(localStorage.time)){
         localStorage.time = new Date().getTime();
     }
@@ -237,17 +234,18 @@ function increment(item, amt) {
 /** Adjusts the news GUI to your total number. */
 
 function newsRender(){
-    let totalNumber = localStorage.getItem("totalNumber");
+    let tot = parseFloat(localStorage.totalNumber);
 
-    let newsNumber = Math.floor(Math.log10(totalNumber)) - 1;
-    if (newsNumber <= 0 || totalNumber == 0){
-        setContent("news", news[0]);
+    let newsNumber = Math.floor(Math.log10(tot)) - 1;
+    if (newsNumber <= 0 || tot == 0){
+        localStorage.news = news[0];
     } else if (newsNumber >= news.length){
-        setContent("news", news[news.length-1]);
+        localStorage.news = news[news.length - 1];
     } else{
-        setContent("news", news[newsNumber]);
+        localStorage.news = news[newsNumber];
     }
-    
+
+    setContent("news", localStorage.news);
 
 }
 
@@ -318,10 +316,16 @@ function guiSetUp(){
     
 }
 
+/** Variables that are important to store elsewhere. */
+
 const NUM_RANKS = 10;
+
+const INTERVAL = 30;
+
 let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No", 
     "Dc", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod",
     "V", "Uv", "Dv", "Tv", "Qav", "Qiv", "Sxv", "Spv", "Ocv", "Nov" ];
+
 let news = [
     "You have a feeling that you're missing something.",
     "The increase of this number has delivered a sense of satisfaction, but not a major one.",
@@ -334,7 +338,6 @@ let news = [
     "Will you stick around, or are you going to soak in the light that is reality?"
 ]
 
-let INTERVAL = 30;
 let refreshRate = setInterval(refresh, INTERVAL);
 
 let incrementors = document.getElementById("incrementors");
