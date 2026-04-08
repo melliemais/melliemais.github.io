@@ -42,11 +42,16 @@ function importFunction(data){
         }
 }
 
-/** The function responsible for displaying variables. */
+/** The function responsible for displaying numbers. */
 
 function displayItem(item) {
 
     let float = parseFloat(localStorage.getItem(item));
+
+    if (!Number.isFinite(float) && !isNaN(float)){
+        return "∞";
+    }
+
     let power = Math.floor(Math.floor(Math.log10(float)) / 3);
 
     let roundAmt = Math.floor(float * 10) / 10;
@@ -98,7 +103,7 @@ function refresh() {
         gain(gap);
     }
 
-    for (let i of ranks) {
+    for (let i = 0; i < NUM_RANKS; i++) {
         setContent(i + "Incrementor-quantity", displayItem(i + "Incrementor-quantity") + " owned");
         setContent(i + "Incrementor-cost", displayItem(i + "Incrementor-cost"));
         setContent(i + "Incrementor-production", displayItem(i + "Incrementor-production") + " / sec");
@@ -129,14 +134,14 @@ function reset() {
     localStorage.click = 0;
     localStorage.news = news[0];
 
-    for (let i = 0; i < ranks.length; i++) {
-        localStorage[ranks[i] + "Incrementor-quantity"] = 0;
-        localStorage[ranks[i] + "Incrementor-cost"] =  Math.pow(8, i) * 10;
-        localStorage[ranks[i] + "Incrementor-production"] = Math.pow(5, i);
+    for (let i = 0; i < NUM_RANKS; i++) {
+        localStorage[i + "Incrementor-quantity"] = 0;
+        localStorage[i + "Incrementor-cost"] =  Math.pow(8, i) * 10;
+        localStorage[i + "Incrementor-production"] = Math.pow(5, i);
 
-        localStorage[ranks[i] + "Clicker-quantity"] = 0;
-        localStorage[ranks[i] + "Clicker-cost"] = Math.pow(10, i + 1);
-        localStorage[ranks[i] + "Clicker-production"] = Math.pow(6, i);
+        localStorage[i + "Clicker-quantity"] = 0;
+        localStorage[i + "Clicker-cost"] = Math.pow(10, i + 1);
+        localStorage[i + "Clicker-production"] = Math.pow(6, i);
     }
 
     localStorage.time = new Date().getTime();
@@ -163,18 +168,18 @@ function validate(){
         localStorage.time = new Date().getTime();
     }
 
-    for (let i = 0; i < ranks.length; i++){
-        if (!isValid(localStorage[ranks[i]+"Incrementor-quantity"]))
+    for (let i = 0; i < NUM_RANKS; i++){
+        if (!isValid(localStorage[i+"Incrementor-quantity"]))
         {
-            localStorage[ranks[i] + "Incrementor-quantity"] = 0;
-            localStorage[ranks[i] + "Incrementor-cost"] =  Math.pow(8, i) * 10;
-            localStorage[ranks[i] + "Incrementor-production"] = Math.pow(5, i);
+            localStorage[i + "Incrementor-quantity"] = 0;
+            localStorage[i + "Incrementor-cost"] =  Math.pow(8, i) * 10;
+            localStorage[i + "Incrementor-production"] = Math.pow(5, i);
         }
-        if (!isValid(localStorage[ranks[i]+"Clicker-quantity"]))
+        if (!isValid(localStorage[i+"Clicker-quantity"]))
         {
-            localStorage[ranks[i] + "Clicker-quantity"] = 0;
-            localStorage[ranks[i] + "Clicker-cost"] =  Math.pow(10, i + 1);
-            localStorage[ranks[i] + "Clicker-production"] = Math.pow(6, i);
+            localStorage[i + "Clicker-quantity"] = 0;
+            localStorage[i + "Clicker-cost"] =  Math.pow(10, i + 1);
+            localStorage[i + "Clicker-production"] = Math.pow(6, i);
         }
     }
 
@@ -189,9 +194,9 @@ function isValid(value){
 function adjustVelocity() {
     let velocity = 0;
     let click = 0;
-    for (let i of ranks) {
-        velocity += parseFloat(localStorage.getItem(i + "Incrementor-production") * parseInt(localStorage.getItem(i + "Incrementor-quantity")));
-        click += parseFloat(localStorage.getItem(i+"Clicker-production") * parseInt(localStorage.getItem(i+"Clicker-quantity")))
+    for (let i = 0; i < NUM_RANKS; i++) {
+        velocity += localStorage[i + "Incrementor-production"] * localStorage[i + "Incrementor-quantity"];
+        click += localStorage[i+"Clicker-production"] * localStorage[i+"Clicker-quantity"];
     }
     localStorage.setItem("velocity", velocity);
     localStorage.setItem("click", click);
@@ -210,19 +215,14 @@ function gain(elapsed) {
 /** Occurs when clicking on a button or incrementor. Successful if your number >= its cost. */
 
 function attemptBuy(item) {
-    let cost = parseInt(localStorage.getItem(item + "-cost"));
-    if (parseInt(localStorage.getItem("number")) >= cost) {
-        increment(item + "-quantity", 1);
-        localStorage.setItem(item + "-cost", Math.ceil(cost * 1.1));
-        pay(cost);
+    let cost = localStorage[item + "-cost"];
+    if (parseFloat(localStorage.number) >= cost) {
+        localStorage[item + "-quantity"]++;
+        localStorage[item + "-cost"] = Math.ceil(cost * 1.1);
+        localStorage.number -= cost;
+        adjustVelocity();
     }
-    adjustVelocity();
-}
-
-/** Decreases your number by the cost of an item. */
-
-function pay(cost) {
-    localStorage.setItem("number", parseInt(localStorage.getItem("number")) - cost);
+    
 }
 
 /** The function responsible for increasing numbers of any kind. */
@@ -257,27 +257,27 @@ function guiSetUp(){
     
     /** Incrementors */
 
-    for (let r = 0; r < ranks.length; r++){
+    for (let r = 0; r < NUM_RANKS; r++){
 
         let i = document.createElement("button");
-        i.id = ranks[r]+"Incrementor";
+        i.id = r+"Incrementor";
         i.classList.add("inc");
-        i.innerHTML = visualRanks[r];
+        i.innerHTML = "Tier " + r;
 
         let cost = document.createElement("div");
-        cost.id = ranks[r]+"Incrementor-cost";
-        cost.innerHTML = "Cost: ?";
+        cost.id = r+"Incrementor-cost";
+        cost.innerHTML = "?";
 
         let owned = document.createElement("div");
-        owned.id = ranks[r]+"Incrementor-quantity";
+        owned.id = r+"Incrementor-quantity";
         owned.innerHTML = "? owned";
 
         let production = document.createElement("div");
-        production.id = ranks[r]+"Incrementor-production";
-        production.innerHTML = "+? / sec";
+        production.id = r+"Incrementor-production";
+        production.innerHTML = "? / sec";
 
         i.addEventListener("click", function () {
-            attemptBuy(ranks[r]+"Incrementor");
+            attemptBuy(r+"Incrementor");
         })
 
         incrementors.appendChild(i);
@@ -288,26 +288,26 @@ function guiSetUp(){
 
     /** Clickers */
 
-    for (let r = 0; r < ranks.length; r++){
+    for (let r = 0; r < NUM_RANKS; r++){
         let c = document.createElement("button");
-        c.id = ranks[r]+"Clicker-btn";
+        c.id = r+"Clicker-btn";
         c.classList.add("cli");
-        c.innerHTML = visualRanks[r];
+        c.innerHTML = "Tier " + r;
 
         let cCost = document.createElement("div");
-        cCost.id = ranks[r]+"Clicker-cost";
+        cCost.id = r+"Clicker-cost";
         cCost.innerHTML = "Cost: ?";
 
         let cOwned = document.createElement("div");
-        cOwned.id = ranks[r]+"Clicker-quantity";
+        cOwned.id = r+"Clicker-quantity";
         cOwned.innerHTML = "? owned";
 
         let cProduction = document.createElement("div");
-        cProduction.id = ranks[r]+"Clicker-production";
+        cProduction.id = r+"Clicker-production";
         cProduction.innerHTML = "+? / sec";
 
         c.addEventListener("click", function () {
-            attemptBuy(ranks[r]+"Clicker");
+            attemptBuy(r+"Clicker");
         })
 
         clickers.appendChild(c);
@@ -318,9 +318,10 @@ function guiSetUp(){
     
 }
 
-let ranks = ["nov", "beg", "std", "prof", "int", "adv", "exp", "mas", "gm", "cha"];
-let visualRanks = ["Novice", "Beginner", "Standard", "Proficient", "Intermediate", "Advanced", "Expert", "Master", "Grandmaster", "Champion"];
-let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx"];
+const NUM_RANKS = 10;
+let amts = ["K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No", 
+    "Dc", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod",
+    "V", "Uv", "Dv", "Tv", "Qav", "Qiv", "Sxv", "Spv", "Ocv", "Nov" ];
 let news = [
     "You have a feeling that you're missing something.",
     "The increase of this number has delivered a sense of satisfaction, but not a major one.",
@@ -333,7 +334,7 @@ let news = [
     "Will you stick around, or are you going to soak in the light that is reality?"
 ]
 
-let INTERVAL = 33;
+let INTERVAL = 30;
 let refreshRate = setInterval(refresh, INTERVAL);
 
 let incrementors = document.getElementById("incrementors");
