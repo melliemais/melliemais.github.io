@@ -49,3 +49,7 @@ button {
 .cli:hover {
     background-color: rgb(121, 182, 177);
 }
+
+.tab{
+    display: "none";
+}

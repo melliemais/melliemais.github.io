@@ -18,18 +18,48 @@
         <span id="click">+1 / click</span>
     </h3>
     <div id="news" class="container">You have a feeling that you're missing something.</div>
-    <button id="increment-btn" tabindex="-1">Increment</button><br>
+    <button id="tab-producers" onClick="show('producers')">Producers</button>
+    <button id="tab-producers" onClick="show('options')">Options</button><br>
+    <div id="producers" class="tab">
+
+        <button id="increment-btn" tabindex="-1">Increment</button><br>
 
 
-    <h3 id="incrementors">Incrementors<br></h3>
+        <h3 id="incrementors">Incrementors<br></h3>
 
-    <h3 id="clickers">Clickers<br></h3>
+        <h3 id="clickers">Clickers<br></h3>
 
-    <button id="reset-btn" class="reset">Reset</button>
-    <button id="export-btn">Export</button>
-    <button id="import-btn">Import</button><br>
+        
+    </div>
+    <div id="options" class="tab">
+
+        <button id="export-btn">Export</button>
+        <h4> Export File: </h4>
+        <textarea id="export-result" cols="40" rows="10" readonly> </textarea> <br>
+        
+        <h4> Import File: </h4>
+        <textarea id="import-area" cols="40" rows="10"></textarea> <br>
+        <button id="import-btn">Import</button><br>
+
+        <button id="reset-btn" class="reset">Reset</button>
+        
+    </div>
 
 </body>
+<script>
+    let tabs = ['producers', 'options'];
+    show('producers');
+    hide('options');
+    function show(element){
+        for (let t of tabs){
+            hide(t);
+        }
+        document.getElementById(element).style.display = "inline";
+    }
+    function hide(element){
+        document.getElementById(element).style.display = "none";
+    }
+</script>
 <script src="proj3_main.js"></script>
 <footer>
     <br><a href="projects.html">Back to Project Portal</a>

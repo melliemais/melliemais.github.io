@@ -14,11 +14,11 @@ function buttons() {
 }
 
 function exportFunction() {
-    console.log(JSON.stringify(localStorage));
+    document.getElementById("export-result").value = (JSON.stringify(localStorage));
 }
 
 function importPrompt() {
-    let importFile = prompt("Insert your savefile here...");
+    let importFile = document.getElementById("import-area").value;
     if (importFile == null || importFile == "") {
         alert("Import cannot be empty.")
     } else {
@@ -91,18 +91,6 @@ function refresh() {
     setContent("velocity", displayItem("velocity") + " / sec");
     setContent("click", displayItem("click") + " / click");
 
-    let newTime = new Date().getTime();
-
-    let gap = newTime - localStorage.getItem("time");
-
-    localStorage.setItem("time", newTime);
-
-    if (gap > 60000){
-        alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain(gap)));
-    } else{
-        gain(gap);
-    }
-
     for (let i = 0; i < NUM_RANKS; i++) {
         setContent(i + "Incrementor-quantity", displayItem(i + "Incrementor-quantity") + " owned");
         setContent(i + "Incrementor-cost", displayItem(i + "Incrementor-cost"));
@@ -112,6 +100,8 @@ function refresh() {
         setContent(i + "Clicker-cost", displayItem(i + "Clicker-cost"));
         setContent(i + "Clicker-production", displayItem(i + "Clicker-production") + " / click");
     }
+
+    gain();
     
     newsRender();
 }
@@ -201,10 +191,26 @@ function adjustVelocity() {
 
 /** Increases your number by your velocity, multiplied by time elapsed. */
 
-function gain(elapsed) {
-    if (localStorage.velocity == 0) return 0;
-    let gain = parseFloat(localStorage.velocity) * (elapsed / 1000);
+function gain() {
+
+    let newTime = new Date().getTime();
+
+    let gap = newTime - localStorage.time;
+
+    localStorage.time = newTime;
+
+    if (gap < 0){
+        alert("Don't set your time backward.");
+        return 0;
+    }
+
+    let gain = localStorage.velocity * (gap / 1000);
     increment("number", gain);
+
+    if (gap > 60000){
+        alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain));
+    }
+    
 
     return gain;
 }
