@@ -81,6 +81,23 @@ function displayNumber(amt) {
     }
 }
 
+/** The function responsible for displaying a length of time. */
+
+function displayTime(ms){
+    let s = Math.floor((ms / 1000) % 60);
+    let m = Math.floor((ms / 60000) % 60);
+    let h = Math.floor((ms / 3600000) % 24);
+    let d = Math.floor((ms / 86400000) % 365);
+    let y = Math.floor(ms / 31536000000);
+
+    return ((y > 0) ? (y + " years, ") : ("")) +
+    ((d > 0) ? (d + " days, ") : ("")) +
+    ((h > 0) ? (h + " hours, ") : ("")) +
+    ((m > 0) ? (m + " minutes, ") : ("")) + 
+    s + " seconds";
+
+}
+
 /** Fixes the GUI based on what happens in-game. */
 
 function refresh() {
@@ -91,15 +108,34 @@ function refresh() {
     setContent("velocity", displayItem("velocity") + " / sec");
     setContent("click", displayItem("click") + " / click");
 
+    // Producers
+
     for (let i = 0; i < NUM_RANKS; i++) {
         setContent(i + "Incrementor-quantity", displayItem(i + "Incrementor-quantity") + " owned");
         setContent(i + "Incrementor-cost", displayItem(i + "Incrementor-cost"));
         setContent(i + "Incrementor-production", displayItem(i + "Incrementor-production") + " / sec");
 
+        if (localStorage.number < localStorage[i+"Incrementor-cost"]){
+            document.getElementById(i+"Incrementor").style = "background-color: gray";
+        } else{
+            document.getElementById(i+"Incrementor").style = "background-color: black";
+        }
+
         setContent(i + "Clicker-quantity", displayItem(i + "Clicker-quantity") + " owned");
         setContent(i + "Clicker-cost", displayItem(i + "Clicker-cost"));
         setContent(i + "Clicker-production", displayItem(i + "Clicker-production") + " / click");
+
+        if (localStorage.number < localStorage[i+"Incrementor-cost"]){
+            document.getElementById(i+"Clicker").style = "background-color: gray";
+        } else{
+            document.getElementById(i+"Clicker").style = "background-color: black";
+        }
     }
+
+    // Stats
+
+    setContent("totalNumber", "Total Number: " + displayItem("totalNumber"));
+    setContent("duration", "Time since inception: " + displayTime(localStorage.time - localStorage.inception));
 
     gain();
     
@@ -134,6 +170,7 @@ function reset() {
         localStorage[i + "Clicker-production"] = Math.pow(6, i);
     }
 
+    localStorage.inception = newDate().getTime();
     localStorage.time = new Date().getTime();
 
 }
@@ -153,6 +190,9 @@ function validate(){
     }
     if (!isValid(localStorage.time)){
         localStorage.time = new Date().getTime();
+    }
+    if (!isValid(localStorage.inception)){
+        localStorage.inception = new Date().getTime();
     }
 
     for (let i = 0; i < NUM_RANKS; i++){
@@ -197,20 +237,20 @@ function gain() {
 
     let gap = newTime - localStorage.time;
 
-    localStorage.time = newTime;
-
-    if (gap < 0){
-        alert("Don't set your time backward.");
+    if (gap < 0 || localStorage.time < localStorage.inception){
+        alert("I noticed that you did something.");
+        localStorage.time = newTime;
         return 0;
     }
+
+    localStorage.time = newTime;
 
     let gain = localStorage.velocity * (gap / 1000);
     increment("number", gain);
 
     if (gap > 60000){
-        alert("You have been gone for " + Math.floor(gap / 1000) + " seconds\nYour number increased by " + displayNumber(gain));
+        alert("You have been gone for " + displayTime(gap) + "\nYour number increased by " + displayNumber(gain));
     }
-    
 
     return gain;
 }
@@ -288,13 +328,14 @@ function guiSetUp(){
         i.appendChild(cost);
         i.appendChild(owned);
         i.appendChild(production);
+        
     }
 
     /** Clickers */
 
     for (let r = 0; r < NUM_RANKS; r++){
         let c = document.createElement("button");
-        c.id = r+"Clicker-btn";
+        c.id = r+"Clicker";
         c.classList.add("cli");
         c.innerHTML = "Tier " + r;
 

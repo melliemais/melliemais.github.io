@@ -19,7 +19,8 @@
     </h3>
     <div id="news" class="container">You have a feeling that you're missing something.</div>
     <button id="tab-producers" onClick="show('producers')">Producers</button>
-    <button id="tab-producers" onClick="show('options')">Options</button><br>
+    <button id="tab-producers" onClick="show('options')">Options</button>
+    <button id="tab-producers" onClick="show('stats')">Stats</button><br>
     <div id="producers" class="tab">
 
         <button id="increment-btn" tabindex="-1">Increment</button><br>
@@ -45,11 +46,18 @@
         
     </div>
 
+    <div id="stats" class="tab">
+
+        <br>
+        <div id="totalNumber">Total number:</div>
+        <div id="duration">Time since inception:</div>
+        
+    </div>
+
 </body>
 <script>
-    let tabs = ['producers', 'options'];
+    let tabs = ['producers', 'stats', 'options'];
     show('producers');
-    hide('options');
     function show(element){
         for (let t of tabs){
             hide(t);

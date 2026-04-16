@@ -17,14 +17,16 @@ label {
 }
 
 button {
-    background-color: #2a5b8f;
+    background-color: black;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #fff;
+    border-radius: 0px;
+    width: 9rem;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 30px;
+   
 }
 
 .reset{
@@ -35,20 +37,16 @@ button {
     background-color: rgb(123, 25, 25);
 }
 
-.inc{
+#incrementors{
     background-color: rgb(210, 183, 140);
     color: black;
 }
-.inc:hover {
-    background-color: rgb(183, 160, 122);
-}
-.cli{
+
+#clickers{
     background-color: rgb(140, 210, 204);
     color: black;
 }
-.cli:hover {
-    background-color: rgb(121, 182, 177);
-}
+
 
 .tab{
     display: "none";
