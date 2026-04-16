@@ -115,7 +115,7 @@ function refresh() {
         setContent(i + "Incrementor-cost", displayItem(i + "Incrementor-cost"));
         setContent(i + "Incrementor-production", displayItem(i + "Incrementor-production") + " / sec");
 
-        if (localStorage.number < localStorage[i+"Incrementor-cost"]){
+        if (localStorage.number < parseFloat(localStorage[i+"Incrementor-cost"])){
             document.getElementById(i+"Incrementor").style = "background-color: gray";
         } else{
             document.getElementById(i+"Incrementor").style = "background-color: black";
@@ -125,7 +125,7 @@ function refresh() {
         setContent(i + "Clicker-cost", displayItem(i + "Clicker-cost"));
         setContent(i + "Clicker-production", displayItem(i + "Clicker-production") + " / click");
 
-        if (localStorage.number < localStorage[i+"Incrementor-cost"]){
+        if (localStorage.number < parseFloat(localStorage[i+"Incrementor-cost"])){
             document.getElementById(i+"Clicker").style = "background-color: gray";
         } else{
             document.getElementById(i+"Clicker").style = "background-color: black";
