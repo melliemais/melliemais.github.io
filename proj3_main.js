@@ -125,7 +125,7 @@ function refresh() {
         setContent(i + "Clicker-cost", displayItem(i + "Clicker-cost"));
         setContent(i + "Clicker-production", displayItem(i + "Clicker-production") + " / click");
 
-        if (localStorage.number < parseFloat(localStorage[i+"Incrementor-cost"])){
+        if (localStorage.number < parseFloat(localStorage[i+"Clicker-cost"])){
             document.getElementById(i+"Clicker").style = "background-color: gray";
         } else{
             document.getElementById(i+"Clicker").style = "background-color: black";
