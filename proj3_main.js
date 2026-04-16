@@ -170,7 +170,7 @@ function reset() {
         localStorage[i + "Clicker-production"] = Math.pow(6, i);
     }
 
-    localStorage.inception = newDate().getTime();
+    localStorage.inception = new Date().getTime();
     localStorage.time = new Date().getTime();
 
 }
