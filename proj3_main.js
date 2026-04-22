@@ -8,7 +8,7 @@ function buttons() {
     document.getElementById("import-btn").addEventListener("click", importPrompt);
 
     document.getElementById("increment-btn").addEventListener("click", function () {
-        increment("number", parseFloat(localStorage.getItem("click")));
+        increment("number", parseFloat(localStorage.click), "byClick");
     });
 
 }
@@ -46,7 +46,7 @@ function importFunction(data){
 
 function displayItem(item) {
 
-    let float = parseFloat(localStorage.getItem(item));
+    let float = parseFloat(localStorage[item]);
 
     if (!Number.isFinite(float) && !isNaN(float)){
         return "∞";
@@ -135,6 +135,10 @@ function refresh() {
     // Stats
 
     setContent("totalNumber", "Total Number: " + displayItem("totalNumber"));
+    setContent("clicks", "Total clicks: " + displayItem("totalClicks"));
+    setContent("clickProd", "Total from clicks: " + displayItem("totalFromClicks"));
+    setContent("incProd", "Total from production: " + displayItem("totalFromIncs"));
+
     setContent("duration", "Time since inception: " + displayTime(localStorage.time - localStorage.inception));
 
     gain();
@@ -158,6 +162,9 @@ function reset() {
     localStorage.totalNumber = 10;
     localStorage.velocity = 0;
     localStorage.click = 0;
+    localStorage.totalClicks = 0;
+    localStorage.totalFromClicks = 0;
+    localStorage.totalFromIncs = 0;
     localStorage.news = news[0];
 
     for (let i = 0; i < NUM_RANKS; i++) {
@@ -187,6 +194,15 @@ function validate(){
         localStorage.velocity = 0;
     } else if (!isValid(localStorage.click)){
         localStorage.click = 0;
+    }
+    if (!isValid(localStorage.totalClicks)){
+        localStorage.totalClicks = 0;
+    }
+    if (!isValid(localStorage.totalFromClicks)){
+        localStorage.totalClicks = 0;
+    }
+    if (!isValid(localStorage.totalFromIncs)){
+        localStorage.totalFromIncs = localStorage.totalNumber;
     }
     if (!isValid(localStorage.time)){
         localStorage.time = new Date().getTime();
@@ -225,8 +241,8 @@ function adjustVelocity() {
         velocity += localStorage[i + "Incrementor-production"] * localStorage[i + "Incrementor-quantity"];
         click += localStorage[i+"Clicker-production"] * localStorage[i+"Clicker-quantity"];
     }
-    localStorage.setItem("velocity", velocity);
-    localStorage.setItem("click", click);
+    localStorage.velocity = velocity;
+    localStorage.click = click;
 }
 
 /** Increases your number by your velocity, multiplied by time elapsed. */
@@ -246,7 +262,7 @@ function gain() {
     localStorage.time = newTime;
 
     let gain = localStorage.velocity * (gap / 1000);
-    increment("number", gain);
+    increment("number", gain, "byIncrement");
 
     if (gap > 60000){
         alert("You have been gone for " + displayTime(gap) + "\nYour number increased by " + displayNumber(gain));
@@ -270,10 +286,17 @@ function attemptBuy(item) {
 
 /** The function responsible for increasing numbers of any kind. */
 
-function increment(item, amt) {
-    localStorage.setItem(item, parseFloat(localStorage.getItem(item)) + amt);
+function increment(item, amt, method) {
+    localStorage[item] = parseFloat(localStorage[item]) + amt;
     if (item == "number") {
         increment("totalNumber", amt);
+    }
+    if (method == "byClick") {
+        increment("totalClicks", 1);
+        increment("totalFromClicks", amt);
+    }
+    else if (method == "byIncrement"){
+        increment("totalFromIncs", amt)
     }
 }
 
