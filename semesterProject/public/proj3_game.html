@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="proj3_style.css">
+    <title>Cumulative Cumulation</title>
+</head>
+
+<body>
+    <h1>Cumulative Cumulation</h1>
+    <h2>
+        <div id="number">0</div>
+    </h2>
+    <h3>
+        <span id="velocity">+0 / sec</span>
+        <span id="click">+1 / click</span>
+    </h3>
+
+    <div id="news" class="container">You have a feeling that you're missing something.</div>
+    <div id="tabs">
+        <button id="tab-producers" onClick="show('producers')">Producers</button>
+        <button id="tab-options" onClick="show('options')">Options</button>
+        <button id="tab-stats" onClick="show('stats')">Stats</button>
+        <button id="tab-leaderboard" onClick="show('leaderboard')">Leaderboard</button><br>
+    </div>
+
+    <div id="producers" class="tab">
+
+        <button id="increment-btn" tabindex="-1">Increment</button><br>
+
+
+        <h3 id="incrementors">Incrementors<br></h3>
+
+        <h3 id="clickers">Clickers<br></h3>
+
+        
+    </div>
+    <div id="options" class="tab">
+
+        <button id="export-btn">Export</button>
+        <h4> Export File: </h4>
+        <textarea id="export-result" cols="40" rows="10" readonly> </textarea> <br>
+        
+        <h4> Import File: </h4>
+        <textarea id="import-area" cols="40" rows="10"></textarea> <br>
+        <button id="import-btn">Import</button><br>
+
+        <button id="reset-btn" class="reset">Reset</button>
+        
+    </div>
+
+    <div id="stats" class="tab">
+
+        <br>
+        <div id="totalNumber">Total number:</div>
+        
+        
+        <div id="clickProd">Total number from clicks:</div>
+        <div id="incProd">Total number from production:</div><br>
+
+        <div id="clicks">Total clicks:</div>
+
+        <div id="duration">Time since inception:</div>
+        
+    </div>
+
+    <div id="leaderboard" class="tab">
+        <br>
+        <button id="submit-btn">Submit to Leaderboard</button>
+        <br>
+        <div id="lbArea"></div>
+    </div>
+
+</body>
+<script>
+    let tabs = ['producers', 'stats', 'options', 'leaderboard'];
+    show('producers');
+    function show(element){
+        for (let t of tabs){
+            hide(t);
+        }
+        document.getElementById(element).style.display = "inline";
+    }
+    function hide(element){
+        document.getElementById(element).style.display = "none";
+    }
+
+    function statusCheck(response) {
+        if (response.ok) return response;
+        return response.json().then(errData => {
+            const msg = errData.error || ('HTTP ' + response.status);
+            throw new Error(msg);
+        }).catch(() => {throw new Error('HTTP ' + response.status);});
+    }
+
+    document.getElementById('submit-btn').addEventListener('click', () => {
+        fetch('/api/submissions')
+            .then(statusCheck)
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('lbArea').textContent = text;
+            })
+            .catch(error => {
+                document.getElementById('lbArea').textContent = 'Error: ' + error.message;
+            });
+    });
+
+
+</script>
+<script src="proj3_main.js"></script>
+<script src="proj3_server.js"></script>
+<footer>
+    <br><a href="projects.html">Back to Project Portal</a>
+</footer>
+
+</html>
