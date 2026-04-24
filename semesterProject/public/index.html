@@ -68,7 +68,9 @@
 
     <div id="leaderboard" class="tab">
         <br>
-        <button id="submit-btn">Submit to Leaderboard</button>
+        <h3>Leaderboard</h3>
+        <button id="getLB-btn">Get</button>
+        <button id="submitLB-btn">Submit</button>
         <br>
         <div id="lbArea"></div>
     </div>
@@ -95,7 +97,7 @@
         }).catch(() => {throw new Error('HTTP ' + response.status);});
     }
 
-    document.getElementById('submit-btn').addEventListener('click', () => {
+    document.getElementById('getLB-btn').addEventListener('click', () => {
         fetch('/api/submissions')
             .then(statusCheck)
             .then(response => response.text())
@@ -107,10 +109,35 @@
             });
     });
 
+    async function postMessage() {
+      const number = document.getElementById('number').innerHTML;
+      const author = "You";
+      try {
+        const response = await fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+            body: JSON.stringify(
+              { author, number })
+        });
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error);
+        }
+        const newMsg = await response.json();
+        document.getElementById("lbArea").textContent = JSON.stringify(newMsg);
+
+      } catch (error) {
+        document.getElementById("lbArea").textContent = "We couldn't catch that. Sorry!";
+      }
+    }
+
+    document.getElementById("submitLB-btn").addEventListener('click', postMessage);
 
 </script>
 <script src="proj3_main.js"></script>
-<script src="proj3_server.js"></script>
 <footer>
     <br><a href="projects.html">Back to Project Portal</a>
 </footer>
