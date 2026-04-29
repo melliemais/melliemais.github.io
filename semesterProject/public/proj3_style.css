@@ -51,3 +51,15 @@ button {
 .tab{
     display: "none";
 }
+
+#table{
+    display: inline-block;
+    border: 1px solid black;
+    width: "20rem";
+}
+
+.cell{
+    border: 1px solid black;
+    display: inline-block;
+    width: "10rem";
+}

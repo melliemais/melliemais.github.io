@@ -72,7 +72,18 @@
         <button id="getLB-btn">Get</button>
         <button id="submitLB-btn">Submit</button>
         <br>
+        <table id="table">
+            <tr>
+                <td class="cell">Player</td>
+                <td class="cell">Number</td>
+            </tr>
+            <tr>
+                <td id="rank1Player" class="cell">Player</td>
+                <td id="rank1Num"class="cell">Number</td>
+            </tr>
+        </table>
         <div id="lbArea"></div>
+        <div id="feedbackArea"></div>
     </div>
 
 </body>
@@ -102,10 +113,20 @@
             .then(statusCheck)
             .then(response => response.text())
             .then(text => {
+                for (let k in newMsg){
+                    let row = document.createElement("tr");
+                    let player = document.createElement("td");
+                    player.innerHTML = k;
+                    let num = document.createElement("td");
+                    num.innerHTML = newMsg.k;
+                    row.appendChild(player);
+                    row.appendChild(num);
+                    document.getElementById("table").appendChild(row);
+                }
                 document.getElementById('lbArea').textContent = text;
             })
             .catch(error => {
-                document.getElementById('lbArea').textContent = 'Error: ' + error.message;
+                document.getElementById('feedbackArea').textContent = "We couldn't get the leaderboard. Sorry!";
             });
     });
 
@@ -127,10 +148,11 @@
             throw new Error(errData.error);
         }
         const newMsg = await response.json();
+        
         document.getElementById("lbArea").textContent = JSON.stringify(newMsg);
 
       } catch (error) {
-        document.getElementById("lbArea").textContent = "We couldn't catch that. Sorry!";
+        document.getElementById("feedbackArea").textContent = "We couldn't post your submission. Sorry!";
       }
     }
 

@@ -409,7 +409,6 @@ let news = [
 ]
 
 let refreshRate = setInterval(refresh, INTERVAL);
-let online = true;
 
 let incrementors = document.getElementById("incrementors");
 let clickers = document.getElementById("clickers");
