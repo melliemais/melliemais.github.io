@@ -11,6 +11,13 @@ function buttons() {
         increment("number", parseFloat(localStorage.click), "byClick");
     });
 
+    document.getElementById('getLB-btn').addEventListener('click', getLeaderboard);
+
+    document.getElementById("submitLB-btn").addEventListener('click', function () {
+        submitToLeaderboard();
+        getLeaderboard();
+    });
+
 }
 
 function exportFunction() {
@@ -135,6 +142,7 @@ function refresh() {
     // Stats
 
     setContent("totalNumber", "Total Number: " + displayItem("totalNumber"));
+    setContent("rawNumber", parseInt(localStorage.totalNumber));
     setContent("clicks", "Total clicks: " + displayItem("totalClicks"));
     setContent("clickProd", "Total from clicks: " + displayItem("totalFromClicks"));
     setContent("incProd", "Total from production: " + displayItem("totalFromIncs"));
@@ -384,6 +392,97 @@ function guiSetUp(){
         c.appendChild(cProduction);
     }
     
+}
+
+/** Server feature! Helps display errors where present. */
+
+function statusCheck(response) {
+        if (response.ok) return response;
+        return response.json().then(errData => {
+            const msg = errData.error || ('HTTP ' + response.status);
+            throw new Error(msg);
+        }).catch(() => {throw new Error('HTTP ' + response.status);});
+}
+
+/** (Server required!) Checks the leaderboard. */
+
+function getLeaderboard(){
+    fetch('/api/submissions')
+         .then(statusCheck)
+         .then(response => response.text())
+         .then(text => {
+            document.getElementById("table").remove();
+
+            let newMsg = JSON.parse(text);
+
+            let table = document.createElement("table");
+            table.id = "table";
+
+            let headerRow = document.createElement("tr");
+
+            let headerName = document.createElement("td");
+            headerName.innerHTML = "Name";
+            headerName.classList.add("cell");
+
+            let headerNumber = document.createElement("td");
+            headerNumber.innerHTML = "Total Number";
+            headerNumber.classList.add("cell");
+
+            headerRow.appendChild(headerName);
+            headerRow.appendChild(headerNumber);
+
+            table.appendChild(headerRow);
+
+            for (let k in newMsg){
+
+                let row = document.createElement("tr");
+
+                let player = document.createElement("td");
+                player.innerHTML = newMsg[k].name;
+                let num = document.createElement("td");
+                num.innerHTML = displayNumber(newMsg[k].number);
+
+                row.appendChild(player);
+                row.appendChild(num);
+                table.appendChild(row);
+            }
+
+                document.getElementById("lbArea").appendChild(table);
+            })
+            .catch(error => {
+                document.getElementById('feedbackArea').textContent = "We couldn't get the leaderboard. Sorry! (" + error.message + ")";
+            });
+    }
+
+/** (Server required!) Submits your total number to the leaderboard. */
+
+async function submitToLeaderboard() {
+    const number = parseFloat(document.getElementById('rawNumber').innerHTML);
+    let author = document.getElementById('nameInput').value;
+    if (author == ""){
+        author = "You";
+    }
+    try {
+        const response = await fetch('/api/submissions', {
+            method: 'POST',
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+            body: JSON.stringify(
+              { author, number })
+        });
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error);
+        }
+        const newMsg = await response.json();
+        
+        document.getElementById("lbArea").textContent = JSON.stringify(newMsg);
+
+      } catch (error) {
+        document.getElementById("feedbackArea").textContent = "We couldn't post your submission. Sorry! (" + error.message + ")";
+      }
 }
 
 /** Variables that are important to store elsewhere. */

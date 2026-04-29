@@ -2,7 +2,14 @@
 "use strict";
 
 let submissions = [
-    { name: "Allergic to Grass", number: 10000 },
+    
+    { name: "Allergic to Grass", number: 10000000 },
+    { name: "Discord Mod", number: 1000000 },
+    { name: "Idle Guy", number: 100000 },
+    { name: "Left Computer On", number: 10000 },
+    { name: "Into The Rabbit Hole", number: 1000 },
+    { name: "Joshua", number: 100}
+
 ];
  
 const express = require('express');
@@ -30,10 +37,19 @@ app.post('/api/submissions', (req, res) =>{
     };
 
     submissions.push(newSubmission);
+    order();
 });
 
 function order(){
-
+    for (let i = 0; i < submissions.length - 1; i++) {
+        for (let j = 0; j < submissions.length - i - 1; j++) {
+        if (submissions[j].number < submissions[j + 1].number) {
+        let temp = submissions[j];
+        submissions[j] = submissions[j + 1];
+        submissions[j + 1] = temp;
+        }
+    }
+    }
 }
 
 function contains(name){
