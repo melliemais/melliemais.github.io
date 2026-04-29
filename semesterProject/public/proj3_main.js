@@ -11,11 +11,13 @@ function buttons() {
         increment("number", parseFloat(localStorage.click), "byClick");
     });
 
-    document.getElementById('getLB-btn').addEventListener('click', getLeaderboard);
+    document.getElementById('getLB-btn').addEventListener('click', function() {
+        getLeaderboard(true);
+    });
 
     document.getElementById("submitLB-btn").addEventListener('click', function () {
         submitToLeaderboard();
-        getLeaderboard();
+        getLeaderboard(false);
     });
 
 }
@@ -405,12 +407,8 @@ function statusCheck(response) {
 
 /** (Server required!) Checks the leaderboard. */
 
-function getLeaderboard(){
-    fetch('/api/submissions')
-         .then(statusCheck)
-         .then(response => response.text())
-         .then(text => {
-            document.getElementById("table").remove();
+function createTable(text){
+    document.getElementById("table").remove();
 
             let newMsg = JSON.parse(text);
 
@@ -447,20 +445,50 @@ function getLeaderboard(){
             }
 
                 document.getElementById("lbArea").appendChild(table);
+}
+
+
+function getLeaderboard(feedback){
+    fetch('/api/submissions')
+         .then(statusCheck)
+         .then(response => response.text())
+         .then(text => {
+            createTable(text);
             })
             .catch(error => {
-                document.getElementById('feedbackArea').textContent = "We couldn't get the leaderboard. Sorry! (" + error.message + ")";
+                createTable(JSON.stringify(fallbackSubmissions));
+                if (feedback === true){
+                    document.getElementById('feedbackArea').textContent = "We couldn't get the online leaderboard. Sorry!";
+                }
             });
     }
 
 /** (Server required!) Submits your total number to the leaderboard. */
 
+/** Adds a submission to the fallback leaderboard if server does not work. */
+
+function fallbackSubmission(){
+        let submission = {
+            name: document.getElementById('nameInput').value,
+            number: localStorage.totalNumber
+        };
+        fallbackSubmissions.push(submission);
+
+        for (let i = 0; i < fallbackSubmissions.length - 1; i++) {
+            for (let j = 0; j < fallbackSubmissions.length - i - 1; j++) {
+                if (fallbackSubmissions[j].number < fallbackSubmissions[j + 1].number) {
+                    let temp = fallbackSubmissions[j];
+                    fallbackSubmissions[j] = fallbackSubmissions[j + 1];
+                    fallbackSubmissions[j + 1] = temp;
+                }
+            }
+        }
+    createTable(JSON.stringify(fallbackSubmissions));
+}
+
 async function submitToLeaderboard() {
     const number = localStorage.totalNumber;
-    let author = document.getElementById('nameInput').value;
-    if (author == ""){
-        author = "You";
-    }
+    const author = document.getElementById('nameInput').value;
     try {
         const response = await fetch('/api/submissions', {
             method: 'POST',
@@ -472,6 +500,7 @@ async function submitToLeaderboard() {
               { author, number })
         });
         if (!response.ok) {
+            fallbackSubmission();
             const errData = await response.json();
             throw new Error(errData.error);
         }
@@ -479,8 +508,8 @@ async function submitToLeaderboard() {
         
         document.getElementById("lbArea").textContent = JSON.stringify(newMsg);
 
-      } catch (error) {
-        document.getElementById("feedbackArea").textContent = "We couldn't post your submission. Sorry! (" + error.message + ")";
+    } catch (error) {
+        document.getElementById("feedbackArea").textContent = "We couldn't post your submission to the online leaderboard. Sorry!";
       }
 }
 
@@ -505,6 +534,17 @@ let news = [
     "You begin to analyze the cost to risk ratio of playing this game and comparing it to doing anything else.",
     "Will you stick around, or are you going to soak in the light that is reality?"
 ]
+
+let fallbackSubmissions = [
+    
+    { name: "Allergic to Grass", number: 10000000 },
+    { name: "Discord Mod", number: 1000000 },
+    { name: "Idle Guy", number: 100000 },
+    { name: "Left Computer On", number: 10000 },
+    { name: "Into The Rabbit Hole", number: 1000 },
+    { name: "Joshua", number: 100}
+
+];
 
 let refreshRate = setInterval(refresh, INTERVAL);
 
