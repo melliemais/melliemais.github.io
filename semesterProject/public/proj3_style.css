@@ -60,6 +60,5 @@ button {
 
 .cell{
     border: 1px solid black;
-    display: inline-block;
-    width: "10rem";
+    background-color: lightgray;
 }

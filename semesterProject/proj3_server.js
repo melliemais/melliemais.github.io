@@ -23,11 +23,12 @@ app.get('/api/submissions', (req, res) =>{
 });
 
 app.post('/api/submissions', (req, res) =>{
-    console.log(req.body);
+
     let newSubmission = {
         name: req.body.author,
         number: req.body.number
     };
+    
     submissions.push(newSubmission);
 });
     
