@@ -142,7 +142,6 @@ function refresh() {
     // Stats
 
     setContent("totalNumber", "Total Number: " + displayItem("totalNumber"));
-    setContent("rawNumber", parseInt(localStorage.totalNumber));
     setContent("clicks", "Total clicks: " + displayItem("totalClicks"));
     setContent("clickProd", "Total from clicks: " + displayItem("totalFromClicks"));
     setContent("incProd", "Total from production: " + displayItem("totalFromIncs"));
@@ -207,7 +206,7 @@ function validate(){
         localStorage.totalClicks = 0;
     }
     if (!isValid(localStorage.totalFromClicks)){
-        localStorage.totalClicks = 0;
+        localStorage.totalFromClicks = 0;
     }
     if (!isValid(localStorage.totalFromIncs)){
         localStorage.totalFromIncs = localStorage.totalNumber;
@@ -457,7 +456,7 @@ function getLeaderboard(){
 /** (Server required!) Submits your total number to the leaderboard. */
 
 async function submitToLeaderboard() {
-    const number = parseFloat(document.getElementById('rawNumber').innerHTML);
+    const number = localStorage.totalNumber;
     let author = document.getElementById('nameInput').value;
     if (author == ""){
         author = "You";
