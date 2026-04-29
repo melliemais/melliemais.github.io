@@ -28,9 +28,17 @@ app.post('/api/submissions', (req, res) =>{
         name: req.body.author,
         number: req.body.number
     };
-    
+
     submissions.push(newSubmission);
 });
+
+function order(){
+
+}
+
+function contains(name){
+    
+}
     
     // ---- Your endpoints go above this line ----
     
