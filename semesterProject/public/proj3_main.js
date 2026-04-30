@@ -449,18 +449,20 @@ function createTable(text){
 
 
 function getLeaderboard(feedback){
-    fetch('/api/submissions')
-         .then(statusCheck)
-         .then(response => response.text())
-         .then(text => {
-            createTable(text);
-            })
-            .catch(error => {
-                createTable(JSON.stringify(fallbackSubmissions));
-                if (feedback === true){
-                    document.getElementById('feedbackArea').textContent = "We couldn't get the online leaderboard. Sorry!";
-                }
-            });
+    if (feedback === true){
+        fetch('/api/submissions')
+            .then(statusCheck)
+            .then(response => response.text())
+            .then(text => {
+                createTable(text);
+                })
+                .catch(error => {
+                    createTable(JSON.stringify(fallbackSubmissions));
+                    
+                        document.getElementById('feedbackArea').textContent = "We couldn't get the online leaderboard. Sorry!";
+                    
+                });
+        }
     }
 
 /** (Server required!) Submits your total number to the leaderboard. */
@@ -468,22 +470,32 @@ function getLeaderboard(feedback){
 /** Adds a submission to the fallback leaderboard if server does not work. */
 
 function fallbackSubmission(){
-        let submission = {
-            name: document.getElementById('nameInput').value,
-            number: localStorage.totalNumber
-        };
-        fallbackSubmissions.push(submission);
+    let name = document.getElementById('nameInput').value;
+    yourSubmission = {
+        name: name,
+        number: localStorage.totalNumber
+    };
 
-        for (let i = 0; i < fallbackSubmissions.length - 1; i++) {
-            for (let j = 0; j < fallbackSubmissions.length - i - 1; j++) {
-                if (fallbackSubmissions[j].number < fallbackSubmissions[j + 1].number) {
-                    let temp = fallbackSubmissions[j];
-                    fallbackSubmissions[j] = fallbackSubmissions[j + 1];
-                    fallbackSubmissions[j + 1] = temp;
-                }
+    let craftedLeaderboard = [];
+
+    for (let k in fallbackSubmissions){
+        craftedLeaderboard.push(fallbackSubmissions[k]);
+    }
+
+    craftedLeaderboard.push(yourSubmission);
+
+    for (let i = 0; i < craftedLeaderboard.length - 1; i++) {
+        for (let j = 0; j < craftedLeaderboard.length - i - 1; j++) {
+            if (craftedLeaderboard[j].number < craftedLeaderboard[j + 1].number) {
+                let temp = craftedLeaderboard[j];
+                craftedLeaderboard[j] = craftedLeaderboard[j + 1];
+                craftedLeaderboard[j + 1] = temp;
             }
         }
-    createTable(JSON.stringify(fallbackSubmissions));
+    }
+        
+    createTable(JSON.stringify(craftedLeaderboard));
+
 }
 
 async function submitToLeaderboard() {
@@ -500,7 +512,7 @@ async function submitToLeaderboard() {
               { author, number })
         });
         if (!response.ok) {
-            fallbackSubmission();
+            
             const errData = await response.json();
             throw new Error(errData.error);
         }
@@ -509,11 +521,14 @@ async function submitToLeaderboard() {
         document.getElementById("lbArea").textContent = JSON.stringify(newMsg);
 
     } catch (error) {
+        fallbackSubmission();
         document.getElementById("feedbackArea").textContent = "We couldn't post your submission to the online leaderboard. Sorry!";
       }
 }
 
 /** Variables that are important to store elsewhere. */
+
+let yourSubmission;
 
 const NUM_RANKS = 10;
 
@@ -537,12 +552,15 @@ let news = [
 
 let fallbackSubmissions = [
     
-    { name: "Allergic to Grass", number: 10000000 },
-    { name: "Discord Mod", number: 1000000 },
-    { name: "Idle Guy", number: 100000 },
-    { name: "Left Computer On", number: 10000 },
-    { name: "Into The Rabbit Hole", number: 1000 },
-    { name: "Joshua", number: 100}
+    { name: "Moved On", number: 12340000000 },
+    { name: "Student Loans", number: 1000000000 },
+    { name: "Fell Asleep", number: 555500000 },
+    { name: "Grass Allergy", number: 69000000 },
+    { name: "Bum Bean", number: 4200000 },
+    { name: "Idle Guy", number: 133701 },
+    { name: "Left Computer On", number: 19840 },
+    { name: "Into The Rabbit Hole", number: 2026 },
+    { name: "Steve", number: 101 }
 
 ];
 

@@ -3,12 +3,15 @@
 
 let submissions = [
     
-    { name: "Allergic to Grass", number: 10000000 },
-    { name: "Discord Mod", number: 1000000 },
-    { name: "Idle Guy", number: 100000 },
-    { name: "Left Computer On", number: 10000 },
-    { name: "Into The Rabbit Hole", number: 1000 },
-    { name: "Joshua", number: 100}
+    { name: "Moved On", number: 12340000000 },
+    { name: "Student Loans", number: 1000000000 },
+    { name: "Fell Asleep", number: 555500000 },
+    { name: "Grass Allergy", number: 69000000 },
+    { name: "Bum Bean", number: 4200000 },
+    { name: "Idle Guy", number: 133700 },
+    { name: "Left Computer On", number: 19840 },
+    { name: "Into The Rabbit Hole", number: 2026 },
+    { name: "Steve", number: 101 }
 
 ];
  
